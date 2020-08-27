@@ -25,7 +25,10 @@ set mouse=a
 call plug#begin('~/.nvim/plugged')
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'editorconfig/editorconfig-vim'
+Plug 'mattn/emmet-vim'
 Plug 'fisadev/fisa-vim-colorscheme'
+Plug 'ryanoasis/vim-devicons'
 Plug 'tweekmonster/gofmt.vim'
 Plug 'tpope/vim-fugitive'
 Plug 'vim-utils/vim-man'
@@ -49,13 +52,16 @@ Plug 'prettier/vim-prettier', { 'do': 'npm install' }
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'jiangmiao/auto-pairs'
 Plug 'skywind3000/vim-terminal-help'
-
+Plug 'tpope/vim-surround'
 
 call plug#end()
 
 let g:onedark_hide_endofbuffer=1
 let g:onedark_termcolors=256
 let g:onedark_terminal_italics=1
+
+" emmet
+let g:user_emmet_mode='i'    "only enable insert mode functions.
 
 colorscheme onedark
 "set background=dark
@@ -370,5 +376,6 @@ command! -nargs=0 Prettier :CocCommand prettier.formatFile
 inoremap <C-H> <C-W>
 nmap <C-T> :tabnew <CR> :tablast<CR>
 nmap <C-Q> :tabclose <CR>
+nmap <leader>s ysiw
 "nnoremap <leader>t :term <CR>
 "tmap <leader>t <C-D><CR>
