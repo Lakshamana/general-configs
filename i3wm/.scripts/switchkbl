@@ -1,0 +1,9 @@
+langs=`setxkbmap -query | grep layout | awk '{print $2}' | tr "," "\n"`
+
+choice=`echo "$langs" | dmenu -i -p "Choose a layout:"`
+[[ $choice == "" ]] && exit 1
+
+new_layouts=`echo $choice,$(echo "$langs" | grep -v $choice)`
+
+setxkbmap -layout $new_layouts
+notify-send "Using keyboard layout: $choice"

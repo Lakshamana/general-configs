@@ -19,13 +19,14 @@ set colorcolumn=80
 "set autochdir
 set mouse=a
 "set t_Co=256
+set autoread
 
 "highlight ColorColumn ctermbg=0 guibg=lightgrey
 
 call plug#begin('~/.nvim/plugged')
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'editorconfig/editorconfig-vim'
+"Plug 'editorconfig/editorconfig-vim'
 Plug 'mattn/emmet-vim'
 Plug 'fisadev/fisa-vim-colorscheme'
 Plug 'ryanoasis/vim-devicons'
@@ -48,13 +49,19 @@ Plug 'vim-airline/vim-airline'
 Plug 'joshdick/onedark.vim'
 " Plug 'gruvbox-community/gruvbox'
 Plug 'scrooloose/nerdcommenter'
-Plug 'prettier/vim-prettier', { 'do': 'npm install' }
+"Plug 'prettier/vim-prettier', { 'do': 'npm install' }
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'jiangmiao/auto-pairs'
 Plug 'skywind3000/vim-terminal-help'
 Plug 'tpope/vim-surround'
+Plug 'tmux-plugins/vim-tmux-focus-events'
+Plug 'antoinemadec/coc-fzf', {'branch': 'release'}
+Plug 'terryma/vim-multiple-cursors'
 
 call plug#end()
+
+" auto read buffers for externally modified files
+au FocusGained,BufEnter * :checktime
 
 let g:onedark_hide_endofbuffer=1
 let g:onedark_termcolors=256
@@ -98,6 +105,17 @@ let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.8 } }
 let $FZF_DEFAULT_OPTS='--reverse'
 let g:fzf_checkout_track_key = 'ctrl-t'
 
+" multicursors plugin mappings
+let g:multi_cursor_use_default_mapping=0
+let g:multi_cursor_select_all_word_key = '<A-n>'
+let g:multi_cursor_start_word_key      = '<C-n>'
+let g:multi_cursor_start_key           = 'g<C-n>'
+let g:multi_cursor_select_all_key      = 'g<A-n>'
+let g:multi_cursor_next_key            = '<C-n>'
+let g:multi_cursor_prev_key            = '<C-p>'
+let g:multi_cursor_skip_key            = '<C-x>'
+let g:multi_cursor_quit_key            = '<Esc>'
+
 nnoremap <leader>gc :GCheckout<CR>
 nnoremap <leader>ghw :h <C-R>=expand("<cword>")<CR><CR>
 nnoremap <leader>prw :CocSearch <C-R>=expand("<cword>")<CR><CR>
@@ -119,6 +137,17 @@ nnoremap <Leader>ee oif err != nil {<CR>log.Fatalf("%+v\n", err)<CR>}<CR><esc>kk
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
 vnoremap X "_d
+
+" mappings
+nnoremap <silent> <space><space> :<C-u>CocFzfList<CR>
+nnoremap <silent> <space>a       :<C-u>CocFzfList diagnostics<CR>
+nnoremap <silent> <space>b       :<C-u>CocFzfList diagnostics --current-buf<CR>
+nnoremap <silent> <space>c       :<C-u>CocFzfList commands<CR>
+nnoremap <silent> <space>e       :<C-u>CocFzfList extensions<CR>
+nnoremap <silent> <space>l       :<C-u>CocFzfList location<CR>
+nnoremap <silent> <space>o       :<C-u>CocFzfList outline<CR>
+nnoremap <silent> <space>s       :<C-u>CocFzfList symbols<CR>
+nnoremap <silent> <space>p       :<C-u>CocFzfListResume<CR>
 
 " vim TODO
 "nmap <Leader>tu <Plug>BujoChecknormal
@@ -322,6 +351,7 @@ let g:coc_global_extensions = [
   \ 'coc-json', 
   \ ]
 
+nmap <Leader>p <Plug>(Prettier)
 
 " from readme
 " if hidden is not set, TextEdit might fail.
@@ -377,5 +407,8 @@ inoremap <C-H> <C-W>
 nmap <C-T> :tabnew <CR> :tablast<CR>
 nmap <C-Q> :tabclose <CR>
 nmap <leader>s ysiw
+nnoremap diff :Gvdiff<CR>
+nnoremap <leader>j :move +1<CR>
+nnoremap <leader>k :move -2<CR>
 "nnoremap <leader>t :term <CR>
 "tmap <leader>t <C-D><CR>
