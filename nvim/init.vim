@@ -49,14 +49,15 @@ Plug 'vim-airline/vim-airline'
 Plug 'joshdick/onedark.vim'
 " Plug 'gruvbox-community/gruvbox'
 Plug 'scrooloose/nerdcommenter'
-"Plug 'prettier/vim-prettier', { 'do': 'npm install' }
+Plug 'prettier/vim-prettier', { 'do': 'npm install' }
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'jiangmiao/auto-pairs'
 Plug 'skywind3000/vim-terminal-help'
 Plug 'tpope/vim-surround'
 Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'antoinemadec/coc-fzf', {'branch': 'release'}
-Plug 'terryma/vim-multiple-cursors'
+Plug 'mg979/vim-visual-multi', {'branch': 'master'}
+Plug 'posva/vim-vue'
 
 call plug#end()
 
@@ -72,6 +73,9 @@ let g:user_emmet_mode='i'    "only enable insert mode functions.
 
 colorscheme onedark
 "set background=dark
+
+" vim-vu config
+let g:vue_pre_processors = 'detect_on_enter'
 
 let g:airline_theme='onedark'
 " --- vim go (polyglot) settings.
@@ -139,15 +143,15 @@ vnoremap K :m '<-2<CR>gv=gv
 vnoremap X "_d
 
 " mappings
-nnoremap <silent> <space><space> :<C-u>CocFzfList<CR>
-nnoremap <silent> <space>a       :<C-u>CocFzfList diagnostics<CR>
-nnoremap <silent> <space>b       :<C-u>CocFzfList diagnostics --current-buf<CR>
-nnoremap <silent> <space>c       :<C-u>CocFzfList commands<CR>
-nnoremap <silent> <space>e       :<C-u>CocFzfList extensions<CR>
-nnoremap <silent> <space>l       :<C-u>CocFzfList location<CR>
-nnoremap <silent> <space>o       :<C-u>CocFzfList outline<CR>
-nnoremap <silent> <space>s       :<C-u>CocFzfList symbols<CR>
-nnoremap <silent> <space>p       :<C-u>CocFzfListResume<CR>
+nnoremap <silent> <leader>fzf :<C-u>CocFzfList<CR>
+nnoremap <silent> <leader>a       :<C-u>CocFzfList diagnostics<CR>
+nnoremap <silent> <leader>b       :<C-u>CocFzfList diagnostics --current-buf<CR>
+nnoremap <silent> <leader>c       :<C-u>CocFzfList commands<CR>
+nnoremap <silent> <leader>e       :<C-u>CocFzfList extensions<CR>
+nnoremap <silent> <leader>w       :<C-u>CocFzfList location<CR>
+nnoremap <silent> <leader>o       :<C-u>CocFzfList outline<CR>
+nnoremap <silent> <leader>s       :<C-u>CocFzfList symbols<CR>
+nnoremap <silent> <leader>lr       :<C-u>CocFzfListResume<CR>
 
 " vim TODO
 "nmap <Leader>tu <Plug>BujoChecknormal
@@ -160,7 +164,7 @@ nmap <leader>vtm :highlight Pmenu ctermbg=gray guibg=gray
 
 inoremap <C-c> <esc>
 
-command! -nargs=0 Prettier :CocCommand prettier.formatFile
+"command! -nargs=0 Prettier :CocCommand prettier.formatFile
 inoremap <silent><expr> <C-space> coc#refresh()
 
 " GoTo code navigation.
@@ -316,7 +320,7 @@ nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
 " Do default action for previous item.
 nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
-nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
+"nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
 " Sweet Sweet FuGITive
 nmap <leader>gh :diffget //3<CR>
@@ -347,12 +351,11 @@ let g:coc_global_extensions = [
   \ 'coc-pairs',
   \ 'coc-tsserver',
   \ 'coc-eslint', 
-  \ 'coc-prettier', 
+  "\ 'coc-prettier', 
   \ 'coc-json', 
   \ ]
 
-nmap <Leader>p <Plug>(Prettier)
-
+"nmap <Leader>p :print_widthPrettier<CR>
 " from readme
 " if hidden is not set, TextEdit might fail.
 set hidden " Some servers have issues with backup files, see #649 set nobackup set nowritebackup  Better display for messages set cmdheight=2  You will have bad experience for diagnostic messages when it's default 4000.
@@ -397,10 +400,79 @@ let g:terminal_list=0
 let g:terminal_kill='term'
 
 " vim-prettier
-"let g:prettier#quickfix_enabled = 0
-"let g:prettier#quickfix_auto_focus = 0
+let g:prettier#quickfix_enabled = 1
+let g:prettier#quickfix_auto_focus = 0
+let g:prettier#autoformat_config_present = 1
+let g:prettier#autoformat_config_files = [
+  \ '.prettierrc',
+  \ '.prettierrc.json',
+  \ '.prettierrc.js',
+  \ '.prettierrc.toml',
+  \ ]
+" Max line length that prettier will wrap on: a number or 'auto' (use
+" textwidth).
+" default: 'auto'
+let g:prettier#config#print_width = 'auto'
+
+" number of spaces per indentation level: a number or 'auto' (use
+" softtabstop)
+" default: 'auto'
+let g:prettier#config#tab_width = 'auto'
+
+" use tabs instead of spaces: true, false, or auto (use the expandtab setting).
+" default: 'auto'
+let g:prettier#config#use_tabs = 'auto'
+
+" flow|babylon|typescript|css|less|scss|json|graphql|markdown or empty string
+" (let prettier choose).
+" default: ''
+let g:prettier#config#parser = ''
+
+" cli-override|file-override|prefer-file
+" default: 'file-override'
+let g:prettier#config#config_precedence = 'file-override'
+
+" always|never|preserve
+" default: 'preserve'
+let g:prettier#config#prose_wrap = 'preserve'
+
+" css|strict|ignore
+" default: 'css'
+let g:prettier#config#html_whitespace_sensitivity = 'css'
+
+" false|true
+" default: 'false'
+let g:prettier#config#require_pragma = 'false'
+
+let g:prettier#config#arrow_parens = 'avoid'
+let g:prettier#config#single_quote = 'true'
+let g:prettier#config#bracket_spacing = 'true'
+let g:prettier#config#trailing_comma = 'none'
+let g:prettier#config#print_width = 100
+let g:prettier#config#semi = 'false'
+
+let g:ft = ''
+function! NERDCommenter_before()
+  if &ft == 'vue'
+    let g:ft = 'vue'
+    let stack = synstack(line('.'), col('.'))
+    if len(stack) > 0
+      let syn = synIDattr((stack)[0], 'name')
+      if len(syn) > 0
+        exe 'setf ' . substitute(tolower(syn), '^vue_', '', '')
+      endif
+    endif
+  endif
+endfunction
+function! NERDCommenter_after()
+  if g:ft == 'vue'
+    setf vue
+    let g:ft = ''
+  endif
+endfunction
+
 " prettier command for coc
-command! -nargs=0 Prettier :CocCommand prettier.formatFile
+"command! -nargs=0 Prettier :CocCommand prettier.formatFile
 
 " Custom mappings
 inoremap <C-H> <C-W>
@@ -408,7 +480,11 @@ nmap <C-T> :tabnew <CR> :tablast<CR>
 nmap <C-Q> :tabclose <CR>
 nmap <leader>s ysiw
 nnoremap diff :Gvdiff<CR>
-nnoremap <leader>j :move +1<CR>
-nnoremap <leader>k :move -2<CR>
+nnoremap <A-j> :m .+1<CR>==
+nnoremap <A-k> :m .-2<CR>==
+inoremap <A-j> <Esc>:m .+1<CR>==gi
+inoremap <A-k> <Esc>:m .-2<CR>==gi
+vnoremap <A-j> :m '>+1<CR>gv=gv
+vnoremap <A-k> :m '<-2<CR>gv=gv
 "nnoremap <leader>t :term <CR>
 "tmap <leader>t <C-D><CR>

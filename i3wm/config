@@ -280,9 +280,6 @@ bindsym $mod+9 exec --no-startup-id blurlock
 # Set screen resolution
 exec --no-startup-id "xrandr --output Virtual1 --mode 1360x768"
 
-# Set screen default background image
-exec --no-startup-id feh --bg-scale ~/Imagens/eclipse.jpg
-
 # Autostart applications
 exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 exec --no-startup-id nitrogen --restore; sleep 1; compton -b
@@ -339,7 +336,7 @@ bar {
 	position top
 
 ## please set your primary output first. Example: 'xrandr --output eDP1 --primary'
-#	tray_output primary
+  tray_output primary
 #	tray_output eDP1
 
 	bindsym button4 nop
@@ -430,3 +427,7 @@ mode "$mode_gaps_outer" {
         bindsym Return mode "default"
         bindsym Escape mode "default"
 }
+
+
+# Set screen default background image
+exec --no-startup-id "feh --bg-scale ~/Imagens/eclipse.jpg"
