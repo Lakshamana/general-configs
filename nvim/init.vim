@@ -15,7 +15,7 @@ set undofile
 set incsearch
 set splitbelow
 "set termwinsize=10x0
-set colorcolumn=80
+set colorcolumn=90
 "set autochdir
 set mouse=a
 "set t_Co=256
@@ -58,6 +58,7 @@ Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'antoinemadec/coc-fzf', {'branch': 'release'}
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 Plug 'posva/vim-vue'
+Plug 'tomtom/tcomment_vim'
 
 call plug#end()
 
@@ -164,7 +165,7 @@ nmap <leader>vtm :highlight Pmenu ctermbg=gray guibg=gray
 
 inoremap <C-c> <esc>
 
-"command! -nargs=0 Prettier :CocCommand prettier.formatFile
+command! -nargs=0 CocPrettier :CocCommand prettier.formatFile
 inoremap <silent><expr> <C-space> coc#refresh()
 
 " GoTo code navigation.
@@ -351,11 +352,12 @@ let g:coc_global_extensions = [
   \ 'coc-pairs',
   \ 'coc-tsserver',
   \ 'coc-eslint', 
-  "\ 'coc-prettier', 
+  \ 'coc-prettier', 
   \ 'coc-json', 
   \ ]
 
-"nmap <Leader>p :print_widthPrettier<CR>
+nmap <Leader>p :Prettier<CR>
+nmap <Leader>P :CocPrettier<CR>
 " from readme
 " if hidden is not set, TextEdit might fail.
 set hidden " Some servers have issues with backup files, see #649 set nobackup set nowritebackup  Better display for messages set cmdheight=2  You will have bad experience for diagnostic messages when it's default 4000.
@@ -369,8 +371,8 @@ set signcolumn=yes
 
 inoremap jk <ESC>
 nmap <C-b> :NERDTreeToggle<CR>
-vmap <C-_> <plug>NERDCommenterToggle
-nmap <C-_> <plug>NERDCommenterToggle
+" vmap <C-_> <plug>NERDCommenterToggle
+" nmap <C-_> <plug>NERDCommenterToggle
 
 " open NERDTree automatically
 "autocmd StdinReadPre * let s:std_in=1
@@ -400,8 +402,9 @@ let g:terminal_list=0
 let g:terminal_kill='term'
 
 " vim-prettier
-let g:prettier#quickfix_enabled = 1
+let g:prettier#quickfix_enabled = 0
 let g:prettier#quickfix_auto_focus = 0
+" let g:prettier#autoformat = 1
 let g:prettier#autoformat_config_present = 1
 let g:prettier#autoformat_config_files = [
   \ '.prettierrc',
@@ -451,25 +454,25 @@ let g:prettier#config#trailing_comma = 'none'
 let g:prettier#config#print_width = 100
 let g:prettier#config#semi = 'false'
 
-let g:ft = ''
-function! NERDCommenter_before()
-  if &ft == 'vue'
-    let g:ft = 'vue'
-    let stack = synstack(line('.'), col('.'))
-    if len(stack) > 0
-      let syn = synIDattr((stack)[0], 'name')
-      if len(syn) > 0
-        exe 'setf ' . substitute(tolower(syn), '^vue_', '', '')
-      endif
-    endif
-  endif
-endfunction
-function! NERDCommenter_after()
-  if g:ft == 'vue'
-    setf vue
-    let g:ft = ''
-  endif
-endfunction
+" let g:ft = ''
+" function! NERDCommenter_before()
+"   if &ft == 'vue'
+"     let g:ft = 'vue'
+"     let stack = synstack(line('.'), col('.'))
+"     if len(stack) > 0
+"       let syn = synIDattr((stack)[0], 'name')
+"       if len(syn) > 0
+"         exe 'setf ' . substitute(tolower(syn), '^vue_', '', '')
+"       endif
+"     endif
+"   endif
+" endfunction
+" function! NERDCommenter_after()
+"   if g:ft == 'vue'
+"     setf vue
+"     let g:ft = ''
+"   endif
+" endfunction
 
 " prettier command for coc
 "command! -nargs=0 Prettier :CocCommand prettier.formatFile
@@ -486,5 +489,6 @@ inoremap <A-j> <Esc>:m .+1<CR>==gi
 inoremap <A-k> <Esc>:m .-2<CR>==gi
 vnoremap <A-j> :m '>+1<CR>gv=gv
 vnoremap <A-k> :m '<-2<CR>gv=gv
+nnoremap <leader>; gv
 "nnoremap <leader>t :term <CR>
 "tmap <leader>t <C-D><CR>
