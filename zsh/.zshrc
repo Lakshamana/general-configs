@@ -4,6 +4,11 @@ export PATH=$HOME/bin:/usr/local/bin:~/.scripts:$PATH
 # Path to your oh-my-zsh installation.
 export ZSH="/home/arjuna/.oh-my-zsh"
 
+# export $BROWSER
+export BROWSER="/usr/bin/qutebrowser"
+
+export QTWEBENGINE_CHROMIUM_FLAGS="--blink-settings=darkMode=4,darkModeImagePolicy=2"
+
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
@@ -74,6 +79,7 @@ plugins=(
 	gcloud 
 	zsh-autosuggestions
 	zsh-syntax-highlighting
+  asdf
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -103,3 +109,9 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias la="ls -a"
+
+# append completions to fpath
+fpath=(${ASDF_DIR}/completions $fpath)
+# initialise completions with ZSH's compinit
+autoload -Uz compinit
+compinit

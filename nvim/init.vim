@@ -59,8 +59,25 @@ Plug 'antoinemadec/coc-fzf', {'branch': 'release'}
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 Plug 'posva/vim-vue'
 Plug 'tomtom/tcomment_vim'
+Plug 'APZelos/blamer.nvim'
+Plug 'henrik/vim-qargs'
+Plug 'Yggdroot/indentLine'
+Plug 'lukas-reineke/indent-blankline.nvim'
+Plug '907th/vim-auto-save'
+Plug 'andymass/vim-matchup'
 
 call plug#end()
+
+let g:auto_save = 1  " enable AutoSave on Vim startup
+let g:auto_save_silent = 1  " do not display the auto-save notification
+let g:auto_save_events = ["CursorHold"]
+" set updatetime=1000
+
+" indentLine - Background (Vim, GVim)
+" let g:indentLine_bgcolor_term = '#808080'
+let g:indentLine_color_term = 239
+let g:indentLine_char = '│'
+" let g:indentLine_setColors = 0
 
 " auto read buffers for externally modified files
 au FocusGained,BufEnter * :checktime
@@ -70,7 +87,7 @@ let g:onedark_termcolors=256
 let g:onedark_terminal_italics=1
 
 " emmet
-let g:user_emmet_mode='i'    "only enable insert mode functions.
+let g:user_emmet_mode='a'    "only enable insert mode functions.
 
 colorscheme onedark
 "set background=dark
@@ -108,7 +125,85 @@ let g:netrw_winsize = 25
 
 let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.8 } }
 let $FZF_DEFAULT_OPTS='--reverse'
-let g:fzf_checkout_track_key = 'ctrl-t'
+let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -l -g ""'
+
+let g:fzf_branch_actions = {
+      \ 'checkout': {
+      \   'prompt': 'Checkout> ',
+      \   'execute': 'echo system("{git} checkout {branch}")',
+      \   'multiple': v:false,
+      \   'keymap': 'enter',
+      \   'required': ['branch'],
+      \   'confirm': v:false,
+      \ },
+      \ 'track': {
+      \   'prompt': 'Track> ',
+      \   'execute': 'echo system("{git} checkout --track {branch}")',
+      \   'multiple': v:false,
+      \   'keymap': 'alt-enter',
+      \   'required': ['branch'],
+      \   'confirm': v:false,
+      \ },
+      \ 'create': {
+      \   'prompt': 'Create> ',
+      \   'execute': 'echo system("{git} checkout -b {input}")',
+      \   'multiple': v:false,
+      \   'keymap': 'ctrl-n',
+      \   'required': ['input'],
+      \   'confirm': v:false,
+      \ },
+      \ 'delete': {
+      \   'prompt': 'Delete> ',
+      \   'execute': 'echo system("{git} branch -D {branch}")',
+      \   'multiple': v:true,
+      \   'keymap': 'ctrl-d',
+      \   'required': ['branch'],
+      \   'confirm': v:true,
+      \ },
+      \ 'merge':{
+      \   'prompt': 'Merge> ',
+      \   'execute': 'echo system("{git} merge {branch}")',
+      \   'multiple': v:false,
+      \   'keymap': 'ctrl-e',
+      \   'required': ['branch'],
+      \   'confirm': v:true,
+      \ },
+      \ 'rebase':{
+      \   'prompt': 'Rebase> ',
+      \   'execute': 'echo system("{git} rebase {branch}")',
+      \   'multiple': v:false,
+      \   'keymap': 'ctrl-r',
+      \   'required': ['branch'],
+      \   'confirm': v:true,
+      \ },
+      \}
+
+let g:fzf_tag_actions = {
+      \ 'checkout': {
+      \   'prompt': 'Checkout> ',
+      \   'execute': 'echo system("{git} checkout {tag}")',
+      \   'multiple': v:false,
+      \   'keymap': 'enter',
+      \   'required': ['tag'],
+      \   'confirm': v:false,
+      \ },
+      \ 'create': {
+      \   'prompt': 'Create> ',
+      \   'execute': 'echo system("{git} tag {input}")',
+      \   'multiple': v:false,
+      \   'keymap': 'ctrl-n',
+      \   'required': ['input'],
+      \   'confirm': v:false,
+      \ },
+      \ 'delete': {
+      \   'prompt': 'Delete> ',
+      \   'execute': 'echo system("{git} branch -D {tag}")',
+      \   'multiple': v:true,
+      \   'keymap': 'ctrl-d',
+      \   'required': ['tag'],
+      \   'confirm': v:true,
+      \ },
+      \}
 
 " multicursors plugin mappings
 let g:multi_cursor_use_default_mapping=0
@@ -181,7 +276,7 @@ set cmdheight=2
 
 " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
 " delays and poor user experience.
-set updatetime=300
+set updatetime=500
 
 " Don't pass messages to |ins-completion-menu|.
 set shortmess+=c
@@ -231,7 +326,7 @@ nmap <silent> [g <Plug>(coc-diagnostic-prev)
 nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
 " GoTo code navigation.
-nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gd :call CocAction('jumpDefinition', 'tab drop')<CR>
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
@@ -483,6 +578,7 @@ nmap <C-T> :tabnew <CR> :tablast<CR>
 nmap <C-Q> :tabclose <CR>
 nmap <leader>s ysiw
 nnoremap diff :Gvdiff<CR>
+nnoremap hdiff :Gvdiff HEAD<CR>
 nnoremap <A-j> :m .+1<CR>==
 nnoremap <A-k> :m .-2<CR>==
 inoremap <A-j> <Esc>:m .+1<CR>==gi
@@ -490,5 +586,8 @@ inoremap <A-k> <Esc>:m .-2<CR>==gi
 vnoremap <A-j> :m '>+1<CR>gv=gv
 vnoremap <A-k> :m '<-2<CR>gv=gv
 nnoremap <leader>; gv
+nnoremap <leader>P li<space><esc>P
 "nnoremap <leader>t :term <CR>
 "tmap <leader>t <C-D><CR>
+nnoremap <C-F>b :NERDTreeFind<CR>
+nnoremap <leader>bl :BlamerToggle<CR>
