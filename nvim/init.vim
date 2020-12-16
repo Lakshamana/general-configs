@@ -1,5 +1,7 @@
 syntax on
 
+set hidden
+set relativenumber
 set noerrorbells
 set tabstop=2 softtabstop=2
 set shiftwidth=2
@@ -50,11 +52,9 @@ Plug 'joshdick/onedark.vim'
 " Plug 'gruvbox-community/gruvbox'
 Plug 'scrooloose/nerdcommenter'
 Plug 'prettier/vim-prettier', { 'do': 'npm install' }
-Plug 'christoomey/vim-tmux-navigator'
 Plug 'jiangmiao/auto-pairs'
 Plug 'skywind3000/vim-terminal-help'
 Plug 'tpope/vim-surround'
-Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'antoinemadec/coc-fzf', {'branch': 'release'}
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 Plug 'posva/vim-vue'
@@ -65,8 +65,27 @@ Plug 'Yggdroot/indentLine'
 Plug 'lukas-reineke/indent-blankline.nvim'
 Plug '907th/vim-auto-save'
 Plug 'andymass/vim-matchup'
+Plug 'etdev/vim-hexcolor'
+Plug 'ap/vim-buftabline'
+Plug 'heavenshell/vim-jsdoc', { 
+  \ 'for': ['javascript', 'javascript.jsx','typescript'], 
+  \ 'do': 'make install'
+\}
 
 call plug#end()
+
+function! ToggleEnableBuftabline()
+  let x = 1 - g:buftabline_show
+  let g:buftabline_show = x
+  call buftabline#update(0)
+endfunction
+
+" Buftabline
+let g:buftabline_show = 1
+nnoremap <silent> <Leader>bf :call ToggleEnableBuftabline()<CR>
+
+" JSDoc mapping
+nmap <silent> <C-l> <Plug>(jsdoc)
 
 let g:auto_save = 1  " enable AutoSave on Vim startup
 let g:auto_save_silent = 1  " do not display the auto-save notification
@@ -241,13 +260,13 @@ vnoremap X "_d
 " mappings
 nnoremap <silent> <leader>fzf :<C-u>CocFzfList<CR>
 nnoremap <silent> <leader>a       :<C-u>CocFzfList diagnostics<CR>
-nnoremap <silent> <leader>b       :<C-u>CocFzfList diagnostics --current-buf<CR>
+nnoremap <silent> <leader>dg       :<C-u>CocFzfList diagnostics --current-buf<CR>
 nnoremap <silent> <leader>c       :<C-u>CocFzfList commands<CR>
 nnoremap <silent> <leader>e       :<C-u>CocFzfList extensions<CR>
 nnoremap <silent> <leader>w       :<C-u>CocFzfList location<CR>
 nnoremap <silent> <leader>o       :<C-u>CocFzfList outline<CR>
 nnoremap <silent> <leader>s       :<C-u>CocFzfList symbols<CR>
-nnoremap <silent> <leader>lr       :<C-u>CocFzfListResume<CR>
+nnoremap <silent> <leader>_lr       :<C-u>CocFzfListResume<CR>
 
 " vim TODO
 "nmap <Leader>tu <Plug>BujoChecknormal
@@ -419,9 +438,25 @@ nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 "nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
 " Sweet Sweet FuGITive
-nmap <leader>gh :diffget //3<CR>
-nmap <leader>gu :diffget //2<CR>
-nmap <leader>gs :G<CR>
+nnoremap <leader>g2 :diffget //2<CR>
+nnoremap <leader>g3 :diffget //3<CR>
+nnoremap <leader>gs :Gstatus<CR>
+nnoremap <leader>gc :Gcommit -v -q<CR>
+nnoremap <leader>ga :Gcommit --amend<CR>
+nnoremap <leader>gt :Gcommit -v -q %<CR>
+nnoremap <leader>gd :Gdiff<CR>
+nnoremap <leader>gvd :Gvdiffsplit!<CR>
+nnoremap <leader>ge :Gedit<CR>
+nnoremap <leader>gr :Gread<CR>
+nnoremap <leader>gw :Gwrite<CR><CR>
+nnoremap <leader>gl :silent! Git log<CR>
+nnoremap <leader>gp :Ggrep<Space>
+nnoremap <leader>gm :Gmove<Space>
+nnoremap <leader>gb :Git branch<Space>
+nnoremap <leader>gbs :Gbranches<Space>
+nnoremap <leader>go :Git checkout<Space>
+nnoremap <leader>gps :Dispatch! git push<CR>
+nnoremap <leader>gpl :Dispatch! git pull<CR>
 
 " sync open file with NERDTree
 " " Check if NERDTree is open or active
@@ -577,8 +612,8 @@ inoremap <C-H> <C-W>
 nmap <C-T> :tabnew <CR> :tablast<CR>
 nmap <C-Q> :tabclose <CR>
 nmap <leader>s ysiw
-nnoremap diff :Gvdiff<CR>
-nnoremap hdiff :Gvdiff HEAD<CR>
+nnoremap <A-d>d :Gvdiff<CR>
+nnoremap <A-d>h :Gvdiff HEAD<CR>
 nnoremap <A-j> :m .+1<CR>==
 nnoremap <A-k> :m .-2<CR>==
 inoremap <A-j> <Esc>:m .+1<CR>==gi
@@ -591,3 +626,8 @@ nnoremap <leader>P li<space><esc>P
 "tmap <leader>t <C-D><CR>
 nnoremap <C-F>b :NERDTreeFind<CR>
 nnoremap <leader>bl :BlamerToggle<CR>
+" buftabline
+nnoremap <A-;> :bnext<CR>
+nnoremap <A-,> :bprev<CR>
+nnoremap <Leader>bb :buffers<CR>:buffer<Space>
+nnoremap <Leader>bd :buffers<CR>:bdelete<Space>

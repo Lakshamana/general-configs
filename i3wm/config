@@ -431,3 +431,6 @@ mode "$mode_gaps_outer" {
         bindsym Return mode "default"
         bindsym Escape mode "default"
 }
+
+# swap Control_L w/ Alt_L
+exec --no-startup-id xmodmap ~/.Xmodmap
