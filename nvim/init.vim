@@ -22,13 +22,14 @@ set colorcolumn=90
 set mouse=a
 "set t_Co=256
 set autoread
+set autowrite
 
 "highlight ColorColumn ctermbg=0 guibg=lightgrey
 
 call plug#begin('~/.nvim/plugged')
 
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-"Plug 'editorconfig/editorconfig-vim'
+Plug 'neoclide/coc.nvim', { 'branch': 'release', 'do': 'npm install' }
+Plug 'editorconfig/editorconfig-vim'
 Plug 'mattn/emmet-vim'
 Plug 'fisadev/fisa-vim-colorscheme'
 Plug 'ryanoasis/vim-devicons'
@@ -67,12 +68,25 @@ Plug '907th/vim-auto-save'
 Plug 'andymass/vim-matchup'
 Plug 'etdev/vim-hexcolor'
 Plug 'ap/vim-buftabline'
+Plug 'jremmen/vim-ripgrep'
+Plug 'joonty/vdebug'
+Plug 'eliba2/vim-node-inspect'
 Plug 'heavenshell/vim-jsdoc', { 
   \ 'for': ['javascript', 'javascript.jsx','typescript'], 
   \ 'do': 'make install'
 \}
 
 call plug#end()
+
+nnoremap <silent><F4> :NodeInspectStart<cr>
+nnoremap <silent><F5> :NodeInspectRun<cr>
+nnoremap <silent><F6> :NodeInspectConnect("127.0.0.1:9229")<cr>
+nnoremap <silent><F7> :NodeInspectStepInto<cr>
+nnoremap <silent><F8> :NodeInspectStepOver<cr>
+nnoremap <silent><F9> :NodeInspectToggleBreakpoint<cr>
+nnoremap <silent><F10> :NodeInspectStop<cr>
+
+let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
 function! ToggleEnableBuftabline()
   let x = 1 - g:buftabline_show
@@ -91,7 +105,7 @@ let g:auto_save = 1  " enable AutoSave on Vim startup
 let g:auto_save_silent = 1  " do not display the auto-save notification
 let g:auto_save_events = ["CursorHold"]
 " set updatetime=1000
-
+"
 " indentLine - Background (Vim, GVim)
 " let g:indentLine_bgcolor_term = '#808080'
 let g:indentLine_color_term = 239
@@ -350,6 +364,21 @@ nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
+" Use <C-l> for trigger snippet expand.
+imap <C-l> <Plug>(coc-snippets-expand)
+
+" Use <C-j> for select text for visual placeholder of snippet.
+vmap <C-j> <Plug>(coc-snippets-select)
+
+" Use <C-j> for jump to next placeholder, it's default of coc.nvim
+let g:coc_snippet_next = '<c-j>'
+
+" Use <C-k> for jump to previous placeholder, it's default of coc.nvim
+let g:coc_snippet_prev = '<c-k>'
+
+" Use <C-j> for both expand and jump (make expand higher priority.)
+imap <C-j> <Plug>(coc-snippets-expand-jump)
+
 " Use K to show documentation in preview window.
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 
@@ -412,7 +441,7 @@ command! -nargs=0 Format :call CocAction('format')
 command! -nargs=? Fold :call     CocAction('fold', <f-args>)
 
 " Add `:OR` command for organize imports of the current buffer.
-command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+command! -nargs=0 OR   :call     CocAction('runCommand', 'Editor.action.organizeImport')
 
 " Add (Neo)Vim's native statusline support.
 " NOTE: Please see `:h coc-status` for integrations with external plugins that
@@ -627,7 +656,9 @@ nnoremap <leader>P li<space><esc>P
 nnoremap <C-F>b :NERDTreeFind<CR>
 nnoremap <leader>bl :BlamerToggle<CR>
 " buftabline
-nnoremap <A-;> :bnext<CR>
+nnoremap <A-/> :bnext<CR>
 nnoremap <A-,> :bprev<CR>
 nnoremap <Leader>bb :buffers<CR>:buffer<Space>
 nnoremap <Leader>bd :buffers<CR>:bdelete<Space>
+nnoremap <leader>W :MatchupWhereAmI?<CR>
+command! -nargs=0 Sw w !sudo tee % > /dev/null

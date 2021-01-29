@@ -65,19 +65,20 @@ bindsym $mod+F5 exec terminal -e 'mocp'
 bindsym $mod+t exec --no-startup-id pkill compton
 bindsym $mod+Ctrl+t exec --no-startup-id compton -b
 bindsym $mod+Shift+d --release exec "killall dunst; exec notify-send 'restart dunst'"
-bindsym Shift+Print exec --no-startup-id i3-scrot
-bindsym $mod+Shift+Print --release exec --no-startup-id i3-scrot -s
-bindsym $mod+Print --release exec --no-startup-id "maim -s -u | xclip -selection clipboard -t image/png -i"
-bindsym Print --release exec --no-startup-id "maim -u | xclip -selection clipboard -t image/png -i"
-#bindsym $mod+Shift+Print --release exec --no-startup-id i3-scrot -s
+bindsym Shift+Mode_switch+Prior exec --no-startup-id i3-scrot
+bindsym $mod+Shift+Mode_switch+Prior --release exec --no-startup-id i3-scrot -s
+bindsym $mod+Mode_switch+Prior --release exec --no-startup-id "maim -s -u | xclip -selection clipboard -t image/png -i"
+bindsym Mode_switch+Prior --release exec --no-startup-id "maim -u | xclip -selection clipboard -t image/png -i"
+#bindsym $mod+Shift+Mode_switch+Prior --release exec --no-startup-id i3-scrot -s
 bindsym $mod+Shift+h exec xdg-open /usr/share/doc/manjaro/i3_help.pdf
 bindsym $mod+Ctrl+x --release exec --no-startup-id xkill
 
 # focus_follows_mouse no
 
-# change keyboard layout
-exec --no-startup-id setxkbmap -layout br,ru
-bindcode Ctrl+Mod1+45 --release exec --no-startup-id ~/.scripts/switchkbl
+# bindsym --no-startup-id "xcape -t 300 -e 'Control_L=Escape' &"
+
+bindcode $mod+Ctrl+57 --release exec --no-startup-id ~/.scripts/switchkbl
+bindcode $mod+Ctrl+58 --release exec --no-startup-id ~/.scripts/switchkbv
 
 # change focus
 bindsym $mod+j focus left
@@ -431,6 +432,3 @@ mode "$mode_gaps_outer" {
         bindsym Return mode "default"
         bindsym Escape mode "default"
 }
-
-# swap Control_L w/ Alt_L
-exec --no-startup-id xmodmap ~/.Xmodmap

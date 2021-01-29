@@ -5,9 +5,11 @@ export PATH=$HOME/bin:/usr/local/bin:~/.scripts:$PATH
 export ZSH="/home/arjuna/.oh-my-zsh"
 
 # export $BROWSER
-export BROWSER="/usr/bin/qutebrowser"
+export BROWSER="/usr/bin/vivaldi-stable"
 
 export QTWEBENGINE_CHROMIUM_FLAGS="--blink-settings=darkMode=4,darkModeImagePolicy=2"
+
+export CLOUDSDK_PYTHON=python2
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
