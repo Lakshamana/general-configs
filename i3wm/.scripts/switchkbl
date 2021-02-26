@@ -1,9 +1,7 @@
-langs=`setxkbmap -query | grep layout | awk '{print $2}' | tr "," "\n"`
+langs=`localectl list-x11-keymap-layouts`
 
 choice=`echo "$langs" | dmenu -i -p "Choose a layout:"`
 [[ $choice == "" ]] && exit 1
 
-new_layouts=`echo $choice,$(echo "$langs" | grep -v $choice)`
-
-setxkbmap -layout $new_layouts
+setxkbmap -layout $choice
 notify-send "Using keyboard layout: $choice"
