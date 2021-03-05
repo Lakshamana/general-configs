@@ -69,8 +69,8 @@ Plug 'andymass/vim-matchup'
 Plug 'etdev/vim-hexcolor'
 Plug 'ap/vim-buftabline'
 Plug 'jremmen/vim-ripgrep'
-Plug 'joonty/vdebug'
 Plug 'eliba2/vim-node-inspect'
+Plug 'nicklasos/vimphphtml'
 Plug 'heavenshell/vim-jsdoc', { 
   \ 'for': ['javascript', 'javascript.jsx','typescript'], 
   \ 'do': 'make install'
@@ -661,4 +661,4 @@ nnoremap <A-,> :bprev<CR>
 nnoremap <Leader>bb :buffers<CR>:buffer<Space>
 nnoremap <Leader>bd :buffers<CR>:bdelete<Space>
 nnoremap <leader>W :MatchupWhereAmI?<CR>
-command! -nargs=0 Sw w !sudo tee % > /dev/null
+com! -bar W exe 'w !sudo tee >/dev/null %:p:S' | setl nomod

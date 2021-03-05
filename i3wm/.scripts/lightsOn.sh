@@ -31,7 +31,7 @@
 # DEBUG=0 for no output
 # DEBUG=1 for sleep prints
 # DEBUG=2 for everything
-DEBUG=0
+DEBUG=2
 
 # this is actually the minimum allowed dynamic delay; also the default (if something fails)
 default_sleep_delay=50
@@ -47,6 +47,7 @@ chromium_flash_detection=1
 chrome_pepper_flash_detection=1
 chrome_html5_detection=1
 vivaldi_html5_detection=1
+popcorntime_detection=1
 minitube_detection=0
 
 # Names of programs which, when running, you wish to delay the screensaver.
@@ -92,7 +93,7 @@ else
         else
 			screensaver=None
 			log "No screensaver detected"
-		fi
+        fi
     fi
 fi
 
@@ -193,20 +194,17 @@ isAppRunning()
     #Get title of active window
     activ_win_title=`xprop -id $activ_win_id | grep "WM_CLASS(STRING)"`   # I used WM_NAME(STRING) before, WM_CLASS more accurate.
 
-
-
     # Check if user want to detect HTML Video fullscreen on Firefox, modify variable firefox_html5_detection if you dont want Firefox detection
     if [ $firefox_html5_detection == 1 ];then
         if [[ "$activ_win_title" = *Firefox* ]];then
         # Check if firefox process is actually running
             firefox_process=`pgrep -lfc "firefox"`
             if [[ $firefox_process -ge 1 ]];then
-				log "isAppRunning(): firefox html5 fullscreen detected"
+                log "isAppRunning(): firefox html5 fullscreen detected"
                 return 1
             fi
         fi
     fi
-
 
     # Check if user want to detect Video fullscreen on Chromium, modify variable chromium_flash_detection if you dont want Chromium detection
     if [ $chromium_flash_detection == 1 ];then
@@ -220,7 +218,6 @@ isAppRunning()
         fi
     fi
 
-
     # Check if user want to detect flash fullscreen on Chrome, modify variable chrome_pepper_flash_detection if you dont want Chrome pepper flash detection.
     if [ $chrome_pepper_flash_detection == 1 ];then
         if [[ "$activ_win_title" = *google-chrome* ]];then
@@ -232,7 +229,6 @@ isAppRunning()
             fi
         fi
     fi
-
 
     # Check if user want to detect html5 fullscreen on Chrome, modify variable chrome_html5_detection if you dont want Chrome html5 detection.
     if [ $chrome_html5_detection == 1 ];then
@@ -253,6 +249,18 @@ isAppRunning()
             vivaldi_process=`pgrep -lfc ".*(V|v)ivaldi.*"`
             if [[ $vivaldi_process -ge 1 ]];then
 				log "isAppRunning(): vivaldi html5 fullscreen detected"
+                return 1
+            fi
+        fi
+    fi
+
+    # Check if user want to detect fullscreen on popcorntime, modify variable popcorntime_detection if you dont want Popcorntime detection.
+    if [ $popcorntime_detection == 1 ];then
+        if [[ "$activ_win_title" = *popcorn* || "$activ_win_title" = *Popcorn* ]];then
+            # Check if Popcorntime process is running
+            popcorntime_process=`pgrep -lfc ".*(P|p)opcorntime*"`
+            if [[ $popcorntime_process -ge 1 ]];then
+            log "isAppRunning(): popcorntime fullscreen detected"
                 return 1
             fi
         fi
