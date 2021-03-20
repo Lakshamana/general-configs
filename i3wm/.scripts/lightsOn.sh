@@ -48,6 +48,7 @@ chrome_pepper_flash_detection=1
 chrome_html5_detection=1
 vivaldi_html5_detection=1
 popcorntime_detection=1
+qutebrowser_html5_detection=1
 minitube_detection=0
 
 # Names of programs which, when running, you wish to delay the screensaver.
@@ -261,6 +262,19 @@ isAppRunning()
             popcorntime_process=`pgrep -lfc ".*(P|p)opcorntime*"`
             if [[ $popcorntime_process -ge 1 ]];then
             log "isAppRunning(): popcorntime fullscreen detected"
+                return 1
+            fi
+        fi
+    fi
+
+    # Check if user want to detect fullscreen on popcorntime, modify variable qutebrowser_html5_detection if you dont want Qutebrowser detection.
+    if [ $qutebrowser_html5_detection == 1 ];then
+        if [[ "$activ_win_title" = *Qutebrowser* || "$activ_win_title" = *qutebrowser* ]];then
+            log "qutebrowser detected"
+            # Check if Popcorntime process is running
+            qutebrowser_process=`pgrep -lfc ".*(Q|q)utebrowser"`
+            if [[ $qutebrowser_process -ge 1 ]];then
+            log "isAppRunning(): qutebrowser fullscreen detected"
                 return 1
             fi
         fi
