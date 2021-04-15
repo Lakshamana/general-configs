@@ -1,5 +1,9 @@
 syntax on
 
+set hidden
+set wildmenu
+set nocompatible
+set relativenumber
 set noerrorbells
 set tabstop=2 softtabstop=2
 set shiftwidth=2
@@ -10,21 +14,24 @@ set nowrap
 set smartcase
 set noswapfile
 set nobackup
-set undodir=~/.nvim/undodir
+set undodir=~/.vim/undodir
 set undofile
 set incsearch
 set splitbelow
 "set termwinsize=10x0
-set colorcolumn=80
+set colorcolumn=90
 "set autochdir
 set mouse=a
-"set t_Co=256
+set t_Co=256
+set autoread
+set autowrite
+set showcmd
 
 "highlight ColorColumn ctermbg=0 guibg=lightgrey
 
 call plug#begin('~/.nvim/plugged')
 
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neoclide/coc.nvim', { 'branch': 'release', 'do': 'npm install' }
 Plug 'editorconfig/editorconfig-vim'
 Plug 'mattn/emmet-vim'
 Plug 'fisadev/fisa-vim-colorscheme'
@@ -49,22 +56,93 @@ Plug 'joshdick/onedark.vim'
 " Plug 'gruvbox-community/gruvbox'
 Plug 'scrooloose/nerdcommenter'
 Plug 'prettier/vim-prettier', { 'do': 'npm install' }
-Plug 'christoomey/vim-tmux-navigator'
 Plug 'jiangmiao/auto-pairs'
 Plug 'skywind3000/vim-terminal-help'
 Plug 'tpope/vim-surround'
+Plug 'antoinemadec/coc-fzf', {'branch': 'release'}
+Plug 'mg979/vim-visual-multi', {'branch': 'master'}
+Plug 'posva/vim-vue'
+Plug 'tomtom/tcomment_vim'
+Plug 'APZelos/blamer.nvim'
+Plug 'henrik/vim-qargs'
+Plug 'Yggdroot/indentLine'
+Plug 'lukas-reineke/indent-blankline.nvim'
+Plug '907th/vim-auto-save'
+Plug 'andymass/vim-matchup'
+Plug 'etdev/vim-hexcolor'
+Plug 'ap/vim-buftabline'
+Plug 'jremmen/vim-ripgrep'
+Plug 'eliba2/vim-node-inspect'
+Plug 'nicklasos/vimphphtml'
+Plug 'turbio/bracey.vim', { 'do': 'npm i --prefix server' }
+Plug 'xuhdev/vim-latex-live-preview'
+Plug 'makerj/vim-pdf'
+Plug 'tpope/vim-haml'
+Plug 'neowit/vim-force.com'
+Plug 'heavenshell/vim-jsdoc', { 
+  \ 'for': ['javascript', 'javascript.jsx','typescript'], 
+  \ 'do': 'make install'
+\}
 
 call plug#end()
+
+let g:apex_backup_folder='/tmp/apex_backup_folder'
+let g:apex_temp_folder='/tmp'
+let g:apex_properties_folder='/home/arjuna/.vim-force'
+let g:apex_tooling_force_dot_com_path='/home/arjuna/Downloads/tooling-force.com-0.4.7.0.jar'
+
+let g:livepreview_previewer = 'mupdf'
+
+nnoremap <silent><F4> :NodeInspectStart<cr>
+nnoremap <silent><F5> :NodeInspectRun<cr>
+nnoremap <silent><F6> :NodeInspectConnect("127.0.0.1:9229")<cr>
+nnoremap <silent><F7> :NodeInspectStepInto<cr>
+nnoremap <silent><F8> :NodeInspectStepOver<cr>
+nnoremap <silent><F9> :NodeInspectToggleBreakpoint<cr>
+nnoremap <silent><F10> :NodeInspectStop<cr>
+
+let g:EditorConfig_exclude_patterns = ['fugitive://.*']
+
+function! ToggleEnableBuftabline()
+  let x = 1 - g:buftabline_show
+  let g:buftabline_show = x
+  call buftabline#update(0)
+endfunction
+
+" Buftabline
+let g:buftabline_show = 1
+nnoremap <silent> <Leader>bf :call ToggleEnableBuftabline()<CR>
+
+" JSDoc mapping
+nmap <silent> <C-l> <Plug>(jsdoc)
+
+let g:auto_save = 1  " enable AutoSave on Vim startup
+let g:auto_save_silent = 1  " do not display the auto-save notification
+let g:auto_save_events = ["CursorHold"]
+" set updatetime=1000
+"
+" indentLine - Background (Vim, GVim)
+" let g:indentLine_bgcolor_term = '#808080'
+let g:indentLine_color_term = 239
+let g:indentLine_char = '│'
+" let g:indentLine_setColors = 0
+
+" auto read buffers for externally modified files
+au FocusGained,BufEnter * :checktime
 
 let g:onedark_hide_endofbuffer=1
 let g:onedark_termcolors=256
 let g:onedark_terminal_italics=1
 
 " emmet
-let g:user_emmet_mode='i'    "only enable insert mode functions.
+let g:user_emmet_mode='a'    "only enable insert mode functions.
+let g:user_emmet_leader_key='<C-_>'
 
 colorscheme onedark
 "set background=dark
+
+" vim-vu config
+let g:vue_pre_processors = 'detect_on_enter'
 
 let g:airline_theme='onedark'
 " --- vim go (polyglot) settings.
@@ -96,7 +174,96 @@ let g:netrw_winsize = 25
 
 let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.8 } }
 let $FZF_DEFAULT_OPTS='--reverse'
-let g:fzf_checkout_track_key = 'ctrl-t'
+let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -l -g ""'
+
+let g:fzf_branch_actions = {
+      \ 'checkout': {
+      \   'prompt': 'Checkout> ',
+      \   'execute': 'echo system("{git} checkout {branch}")',
+      \   'multiple': v:false,
+      \   'keymap': 'enter',
+      \   'required': ['branch'],
+      \   'confirm': v:false,
+      \ },
+      \ 'track': {
+      \   'prompt': 'Track> ',
+      \   'execute': 'echo system("{git} checkout --track {branch}")',
+      \   'multiple': v:false,
+      \   'keymap': 'alt-enter',
+      \   'required': ['branch'],
+      \   'confirm': v:false,
+      \ },
+      \ 'create': {
+      \   'prompt': 'Create> ',
+      \   'execute': 'echo system("{git} checkout -b {input}")',
+      \   'multiple': v:false,
+      \   'keymap': 'ctrl-n',
+      \   'required': ['input'],
+      \   'confirm': v:false,
+      \ },
+      \ 'delete': {
+      \   'prompt': 'Delete> ',
+      \   'execute': 'echo system("{git} branch -D {branch}")',
+      \   'multiple': v:true,
+      \   'keymap': 'ctrl-d',
+      \   'required': ['branch'],
+      \   'confirm': v:true,
+      \ },
+      \ 'merge':{
+      \   'prompt': 'Merge> ',
+      \   'execute': 'echo system("{git} merge {branch}")',
+      \   'multiple': v:false,
+      \   'keymap': 'ctrl-e',
+      \   'required': ['branch'],
+      \   'confirm': v:true,
+      \ },
+      \ 'rebase':{
+      \   'prompt': 'Rebase> ',
+      \   'execute': 'echo system("{git} rebase {branch}")',
+      \   'multiple': v:false,
+      \   'keymap': 'ctrl-r',
+      \   'required': ['branch'],
+      \   'confirm': v:true,
+      \ },
+      \}
+
+let g:fzf_tag_actions = {
+      \ 'checkout': {
+      \   'prompt': 'Checkout> ',
+      \   'execute': 'echo system("{git} checkout {tag}")',
+      \   'multiple': v:false,
+      \   'keymap': 'enter',
+      \   'required': ['tag'],
+      \   'confirm': v:false,
+      \ },
+      \ 'create': {
+      \   'prompt': 'Create> ',
+      \   'execute': 'echo system("{git} tag {input}")',
+      \   'multiple': v:false,
+      \   'keymap': 'ctrl-n',
+      \   'required': ['input'],
+      \   'confirm': v:false,
+      \ },
+      \ 'delete': {
+      \   'prompt': 'Delete> ',
+      \   'execute': 'echo system("{git} branch -D {tag}")',
+      \   'multiple': v:true,
+      \   'keymap': 'ctrl-d',
+      \   'required': ['tag'],
+      \   'confirm': v:true,
+      \ },
+      \}
+
+" multicursors plugin mappings
+let g:multi_cursor_use_default_mapping=0
+let g:multi_cursor_select_all_word_key = '<A-n>'
+let g:multi_cursor_start_word_key      = '<C-n>'
+let g:multi_cursor_start_key           = 'g<C-n>'
+let g:multi_cursor_select_all_key      = 'g<A-n>'
+let g:multi_cursor_next_key            = '<C-n>'
+let g:multi_cursor_prev_key            = '<C-p>'
+let g:multi_cursor_skip_key            = '<C-x>'
+let g:multi_cursor_quit_key            = '<Esc>'
 
 nnoremap <leader>gc :GCheckout<CR>
 nnoremap <leader>ghw :h <C-R>=expand("<cword>")<CR><CR>
@@ -120,6 +287,17 @@ vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
 vnoremap X "_d
 
+" mappings
+nnoremap <silent> <leader>fzf :<C-u>CocFzfList<CR>
+nnoremap <silent> <leader>a       :<C-u>CocFzfList diagnostics<CR>
+nnoremap <silent> <leader>dg       :<C-u>CocFzfList diagnostics --current-buf<CR>
+nnoremap <silent> <leader>c       :<C-u>CocFzfList commands<CR>
+nnoremap <silent> <leader>e       :<C-u>CocFzfList extensions<CR>
+nnoremap <silent> <leader>w       :<C-u>CocFzfList location<CR>
+nnoremap <silent> <leader>o       :<C-u>CocFzfList outline<CR>
+nnoremap <silent> <leader>s       :<C-u>CocFzfList symbols<CR>
+nnoremap <silent> <leader>_lr       :<C-u>CocFzfListResume<CR>
+
 " vim TODO
 "nmap <Leader>tu <Plug>BujoChecknormal
 "nmap <Leader>th <Plug>BujoAddnormal
@@ -131,7 +309,7 @@ nmap <leader>vtm :highlight Pmenu ctermbg=gray guibg=gray
 
 inoremap <C-c> <esc>
 
-command! -nargs=0 Prettier :CocCommand prettier.formatFile
+command! -nargs=0 CocPrettier :CocCommand prettier.formatFile
 inoremap <silent><expr> <C-space> coc#refresh()
 
 " GoTo code navigation.
@@ -147,7 +325,7 @@ set cmdheight=2
 
 " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
 " delays and poor user experience.
-set updatetime=300
+set updatetime=500
 
 " Don't pass messages to |ins-completion-menu|.
 set shortmess+=c
@@ -197,10 +375,25 @@ nmap <silent> [g <Plug>(coc-diagnostic-prev)
 nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
 " GoTo code navigation.
-nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gd :call CocAction('jumpDefinition', 'tab drop')<CR>
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
+
+" Use <C-l> for trigger snippet expand.
+imap <C-l> <Plug>(coc-snippets-expand)
+
+" Use <C-j> for select text for visual placeholder of snippet.
+vmap <C-j> <Plug>(coc-snippets-select)
+
+" Use <C-j> for jump to next placeholder, it's default of coc.nvim
+let g:coc_snippet_next = '<c-j>'
+
+" Use <C-k> for jump to previous placeholder, it's default of coc.nvim
+let g:coc_snippet_prev = '<c-k>'
+
+" Use <C-j> for both expand and jump (make expand higher priority.)
+imap <C-j> <Plug>(coc-snippets-expand-jump)
 
 " Use K to show documentation in preview window.
 nnoremap <silent> K :call <SID>show_documentation()<CR>
@@ -264,7 +457,7 @@ command! -nargs=0 Format :call CocAction('format')
 command! -nargs=? Fold :call     CocAction('fold', <f-args>)
 
 " Add `:OR` command for organize imports of the current buffer.
-command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+command! -nargs=0 OR   :call     CocAction('runCommand', 'Editor.action.organizeImport')
 
 " Add (Neo)Vim's native statusline support.
 " NOTE: Please see `:h coc-status` for integrations with external plugins that
@@ -287,12 +480,28 @@ nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
 " Do default action for previous item.
 nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
-nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
+"nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
 " Sweet Sweet FuGITive
-nmap <leader>gh :diffget //3<CR>
-nmap <leader>gu :diffget //2<CR>
-nmap <leader>gs :G<CR>
+nnoremap <leader>g2 :diffget //2<CR>
+nnoremap <leader>g3 :diffget //3<CR>
+nnoremap <leader>gs :Gstatus<CR>
+nnoremap <leader>gc :Gcommit -v -q<CR>
+nnoremap <leader>ga :Gcommit --amend<CR>
+nnoremap <leader>gt :Gcommit -v -q %<CR>
+nnoremap <leader>gd :Gdiff<CR>
+nnoremap <leader>gvd :Gvdiffsplit!<CR>
+nnoremap <leader>ge :Gedit<CR>
+nnoremap <leader>gr :Gread<CR>
+nnoremap <leader>gw :Gwrite<CR><CR>
+nnoremap <leader>gl :silent! Git log<CR>
+nnoremap <leader>gp :Ggrep<Space>
+nnoremap <leader>gm :Gmove<Space>
+nnoremap <leader>gb :Git branch<Space>
+nnoremap <leader>gbs :Gbranches<Space>
+nnoremap <leader>go :Git checkout<Space>
+nnoremap <leader>gps :Dispatch! git push<CR>
+nnoremap <leader>gpl :Dispatch! git pull<CR>
 
 " sync open file with NERDTree
 " " Check if NERDTree is open or active
@@ -322,7 +531,8 @@ let g:coc_global_extensions = [
   \ 'coc-json', 
   \ ]
 
-
+nmap <Leader>p :Prettier<CR>
+nmap <Leader>P :CocPrettier<CR>
 " from readme
 " if hidden is not set, TextEdit might fail.
 set hidden " Some servers have issues with backup files, see #649 set nobackup set nowritebackup  Better display for messages set cmdheight=2  You will have bad experience for diagnostic messages when it's default 4000.
@@ -334,10 +544,9 @@ set shortmess+=c
 " always show signcolumns
 set signcolumn=yes
 
-inoremap jk <ESC>
 nmap <C-b> :NERDTreeToggle<CR>
-vmap <C-_> <plug>NERDCommenterToggle
-nmap <C-_> <plug>NERDCommenterToggle
+" vmap <C-_> <plug>NERDCommenterToggle
+" nmap <C-_> <plug>NERDCommenterToggle
 
 " open NERDTree automatically
 "autocmd StdinReadPre * let s:std_in=1
@@ -367,15 +576,104 @@ let g:terminal_list=0
 let g:terminal_kill='term'
 
 " vim-prettier
-"let g:prettier#quickfix_enabled = 0
-"let g:prettier#quickfix_auto_focus = 0
+let g:prettier#quickfix_enabled = 0
+let g:prettier#quickfix_auto_focus = 0
+" let g:prettier#autoformat = 1
+let g:prettier#autoformat_config_present = 1
+let g:prettier#autoformat_config_files = [
+  \ '.prettierrc',
+  \ '.prettierrc.json',
+  \ '.prettierrc.js',
+  \ '.prettierrc.toml',
+  \ ]
+" Max line length that prettier will wrap on: a number or 'auto' (use
+" textwidth).
+" default: 'auto'
+let g:prettier#config#print_width = 'auto'
+
+" number of spaces per indentation level: a number or 'auto' (use
+" softtabstop)
+" default: 'auto'
+let g:prettier#config#tab_width = 'auto'
+
+" use tabs instead of spaces: true, false, or auto (use the expandtab setting).
+" default: 'auto'
+let g:prettier#config#use_tabs = 'auto'
+
+" flow|babylon|typescript|css|less|scss|json|graphql|markdown or empty string
+" (let prettier choose).
+" default: ''
+let g:prettier#config#parser = ''
+
+" cli-override|file-override|prefer-file
+" default: 'file-override'
+let g:prettier#config#config_precedence = 'file-override'
+
+" always|never|preserve
+" default: 'preserve'
+let g:prettier#config#prose_wrap = 'preserve'
+
+" css|strict|ignore
+" default: 'css'
+let g:prettier#config#html_whitespace_sensitivity = 'css'
+
+" false|true
+" default: 'false'
+let g:prettier#config#require_pragma = 'false'
+
+let g:prettier#config#arrow_parens = 'avoid'
+let g:prettier#config#single_quote = 'true'
+let g:prettier#config#bracket_spacing = 'true'
+let g:prettier#config#trailing_comma = 'none'
+let g:prettier#config#print_width = 100
+let g:prettier#config#semi = 'false'
+
+" let g:ft = ''
+" function! NERDCommenter_before()
+"   if &ft == 'vue'
+"     let g:ft = 'vue'
+"     let stack = synstack(line('.'), col('.'))
+"     if len(stack) > 0
+"       let syn = synIDattr((stack)[0], 'name')
+"       if len(syn) > 0
+"         exe 'setf ' . substitute(tolower(syn), '^vue_', '', '')
+"       endif
+"     endif
+"   endif
+" endfunction
+" function! NERDCommenter_after()
+"   if g:ft == 'vue'
+"     setf vue
+"     let g:ft = ''
+"   endif
+" endfunction
+
 " prettier command for coc
-command! -nargs=0 Prettier :CocCommand prettier.formatFile
+"command! -nargs=0 Prettier :CocCommand prettier.formatFile
 
 " Custom mappings
 inoremap <C-H> <C-W>
 nmap <C-T> :tabnew <CR> :tablast<CR>
 nmap <C-Q> :tabclose <CR>
 nmap <leader>s ysiw
+nnoremap <A-d>d :Gvdiff<CR>
+nnoremap <A-d>h :Gvdiff HEAD<CR>
+nnoremap <A-j> :m .+1<CR>==
+nnoremap <A-k> :m .-2<CR>==
+inoremap <A-j> <Esc>:m .+1<CR>==gi
+inoremap <A-k> <Esc>:m .-2<CR>==gi
+vnoremap <A-j> :m '>+1<CR>gv=gv
+vnoremap <A-k> :m '<-2<CR>gv=gv
+nnoremap <leader>; gv
+nnoremap <leader>P li<space><esc>P
 "nnoremap <leader>t :term <CR>
 "tmap <leader>t <C-D><CR>
+nnoremap <C-F>b :NERDTreeFind<CR>
+nnoremap <leader>bl :BlamerToggle<CR>
+" buftabline
+nnoremap <A-/> :bnext<CR>
+nnoremap <A-,> :bprev<CR>
+nnoremap <Leader>bb :buffers<CR>:buffer<Space>
+nnoremap <Leader>bd :buffers<CR>:bdelete<Space>
+nnoremap <leader>W :MatchupWhereAmI?<CR>
+com! -bar W exe 'w !sudo tee >/dev/null %:p:S' | setl nomod
