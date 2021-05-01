@@ -27,7 +27,7 @@ font xft:URWGothic-Book 11
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec terminal
+bindsym $mod+Return exec alacritty
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -299,6 +299,7 @@ exec --no-startup-id "pcmanfm-qt -d"
 exec --no-startup-id start_conky_maia
 # exec --no-startup-id start_conky_green
 exec --no-startup-id xautolock -time 10 -locker blurlock
+exec --no-startup-id "~/git/general-configs/i3wm/.scripts/lightsOn.sh 540 &"
 exec_always --no-startup-id ff-theme-util
 exec_always --no-startup-id fix_xcursor
 

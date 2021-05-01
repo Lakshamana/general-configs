@@ -1,5 +1,9 @@
 syntax on
 
+let &t_8f = "\<Esc>[38:2:%lu:%lu:%lum"
+let &t_8b = "\<Esc>[48:2:%lu:%lu:%lum"
+
+set t_Co=256
 set hidden
 set wildmenu
 set nocompatible
@@ -22,7 +26,6 @@ set splitbelow
 set colorcolumn=90
 "set autochdir
 set mouse=a
-set t_Co=256
 set autoread
 set autowrite
 set showcmd
@@ -50,10 +53,9 @@ Plug 'stsewd/fzf-checkout.vim'
 Plug 'vuciv/vim-bujo'
 Plug 'tpope/vim-dispatch'
 Plug '/home/mpaulson/personal/vim-apm'
-Plug 'theprimeagen/vim-be-good', {'do': './install.sh'}
 Plug 'vim-airline/vim-airline'
 Plug 'joshdick/onedark.vim'
-" Plug 'gruvbox-community/gruvbox'
+Plug 'gruvbox-community/gruvbox'
 Plug 'scrooloose/nerdcommenter'
 Plug 'prettier/vim-prettier', { 'do': 'npm install' }
 Plug 'jiangmiao/auto-pairs'
@@ -63,7 +65,6 @@ Plug 'antoinemadec/coc-fzf', {'branch': 'release'}
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 Plug 'posva/vim-vue'
 Plug 'tomtom/tcomment_vim'
-Plug 'APZelos/blamer.nvim'
 Plug 'henrik/vim-qargs'
 Plug 'Yggdroot/indentLine'
 Plug 'lukas-reineke/indent-blankline.nvim'
@@ -79,6 +80,7 @@ Plug 'xuhdev/vim-latex-live-preview'
 Plug 'makerj/vim-pdf'
 Plug 'tpope/vim-haml'
 Plug 'neowit/vim-force.com'
+Plug 'zivyangll/git-blame.vim'
 Plug 'heavenshell/vim-jsdoc', { 
   \ 'for': ['javascript', 'javascript.jsx','typescript'], 
   \ 'do': 'make install'
@@ -87,9 +89,10 @@ Plug 'heavenshell/vim-jsdoc', {
 call plug#end()
 
 let g:apex_backup_folder='/tmp/apex_backup_folder'
+let g:apex_java_cmd = '/home/arjuna/.asdf/installs/java/openjdk-16.0.1/bin/java'
 let g:apex_temp_folder='/tmp'
 let g:apex_properties_folder='/home/arjuna/.vim-force'
-let g:apex_tooling_force_dot_com_path='/home/arjuna/Downloads/tooling-force.com-0.4.7.0.jar'
+let g:apex_tooling_force_dot_com_path='/home/arjuna/Downloads/tooling-force.com-0.5.1.0.jar'
 
 let g:livepreview_previewer = 'mupdf'
 
@@ -134,12 +137,18 @@ let g:onedark_hide_endofbuffer=1
 let g:onedark_termcolors=256
 let g:onedark_terminal_italics=1
 
+let g:gruvbox_termcolors=256
+let g:gruvbox_invert_selection = 0
+let g:gruvbox_contrast_dark='hard'
+let g:gruvbox_italics=1
+
+set background=dark
+colorscheme gruvbox
+set termguicolors
+
 " emmet
 let g:user_emmet_mode='a'    "only enable insert mode functions.
 let g:user_emmet_leader_key='<C-_>'
-
-colorscheme onedark
-"set background=dark
 
 " vim-vu config
 let g:vue_pre_processors = 'detect_on_enter'
@@ -485,7 +494,7 @@ nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Sweet Sweet FuGITive
 nnoremap <leader>g2 :diffget //2<CR>
 nnoremap <leader>g3 :diffget //3<CR>
-nnoremap <leader>gs :Gstatus<CR>
+nnoremap <leader>gs :Git<CR>
 nnoremap <leader>gc :Gcommit -v -q<CR>
 nnoremap <leader>ga :Gcommit --amend<CR>
 nnoremap <leader>gt :Gcommit -v -q %<CR>
