@@ -1,0 +1,34 @@
+set editor='vim'
+colorscheme gruvbox-dark
+
+set scrollsteps=1
+set scrolltime=0
+
+map -b j 8j
+map -b k 8k
+map -b h 8h
+map -b l 8l
+map -b J gT
+map -b K gt
+
+set hintkeys=asdflkj
+hi -a Hint font-size: 9pt !important;
+
+set incfind
+set hlfind
+
+set findcase=smart
+
+set strictfocus=google.com:laissez-faire,'chrome:*':laissez-faire,*:despotic
+so ~/.pentadactyl/user.css
+
+" Allow GMail shortcuts
+set passkeys+=mail.google.com:jksacrqG#<CR>,gi,gl,gp
+" Let Hint Message from X Links
+autocmd LocationChange mail.google.com set ht+=span.ata-asJ
+" Let Hint Expand Collapsed Conversations
+autocmd LocationChange mail.google.com set ht+=span.adx
+" Let Hint Expand Message
+autocmd LocationChange mail.google.com set ht+=td.gF
+" Let Hint Expand Delete All Spam Messages
+autocmd LocationChange mail.google.com set ht+=span.x2

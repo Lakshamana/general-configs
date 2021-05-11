@@ -4,6 +4,7 @@ let &t_8f = "\<Esc>[38:2:%lu:%lu:%lum"
 let &t_8b = "\<Esc>[48:2:%lu:%lu:%lum"
 
 set t_Co=256
+set ignorecase
 set hidden
 set wildmenu
 set nocompatible
@@ -80,7 +81,7 @@ Plug 'xuhdev/vim-latex-live-preview'
 Plug 'makerj/vim-pdf'
 Plug 'tpope/vim-haml'
 Plug 'neowit/vim-force.com'
-Plug 'zivyangll/git-blame.vim'
+Plug 'APZelos/blamer.nvim'
 Plug 'heavenshell/vim-jsdoc', { 
   \ 'for': ['javascript', 'javascript.jsx','typescript'], 
   \ 'do': 'make install'
@@ -88,7 +89,6 @@ Plug 'heavenshell/vim-jsdoc', {
 
 call plug#end()
 
-let g:apex_backup_folder='/tmp/apex_backup_folder'
 let g:apex_java_cmd = '/home/arjuna/.asdf/installs/java/openjdk-16.0.1/bin/java'
 let g:apex_temp_folder='/tmp'
 let g:apex_properties_folder='/home/arjuna/.vim-force'
@@ -146,6 +146,11 @@ set background=dark
 colorscheme gruvbox
 set termguicolors
 
+highlight Visual guifg=NONE
+highlight MatchParen guifg=#2e9fc7 guibg=NONE gui=underline cterm=underline
+
+let g:apex_backup_folder='/tmp/apex_backup_folder'
+
 " emmet
 let g:user_emmet_mode='a'    "only enable insert mode functions.
 let g:user_emmet_leader_key='<C-_>'
@@ -153,7 +158,7 @@ let g:user_emmet_leader_key='<C-_>'
 " vim-vu config
 let g:vue_pre_processors = 'detect_on_enter'
 
-let g:airline_theme='onedark'
+let g:airline_theme='gruvbox'
 " --- vim go (polyglot) settings.
 let g:go_highlight_build_constraints = 1
 let g:go_highlight_extra_types = 1
@@ -678,7 +683,11 @@ nnoremap <leader>P li<space><esc>P
 "nnoremap <leader>t :term <CR>
 "tmap <leader>t <C-D><CR>
 nnoremap <C-F>b :NERDTreeFind<CR>
-nnoremap <leader>bl :BlamerToggle<CR>
+
+" blamer.nvim
+let g:blamer_enabled = 1
+nnoremap <Leader>bl :BlamerToggle<CR>
+
 " buftabline
 nnoremap <A-/> :bnext<CR>
 nnoremap <A-,> :bprev<CR>

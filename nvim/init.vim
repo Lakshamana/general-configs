@@ -1,5 +1,9 @@
 syntax on
 
+let &t_8f = "\<Esc>[38:2:%lu:%lu:%lum"
+let &t_8b = "\<Esc>[48:2:%lu:%lu:%lum"
+
+set t_Co=256
 set hidden
 set relativenumber
 set noerrorbells
@@ -71,12 +75,25 @@ Plug 'ap/vim-buftabline'
 Plug 'jremmen/vim-ripgrep'
 Plug 'eliba2/vim-node-inspect'
 Plug 'nicklasos/vimphphtml'
+Plug 'turbio/bracey.vim', { 'do': 'npm i --prefix server' }
+Plug 'xuhdev/vim-latex-live-preview'
+Plug 'makerj/vim-pdf'
+Plug 'tpope/vim-haml'
+Plug 'neowit/vim-force.com'
+Plug 'gruvbox-community/gruvbox'
 Plug 'heavenshell/vim-jsdoc', { 
   \ 'for': ['javascript', 'javascript.jsx','typescript'], 
   \ 'do': 'make install'
 \}
 
 call plug#end()
+
+let g:apex_backup_folder='/tmp/apex_backup_folder'
+let g:apex_temp_folder='/tmp'
+let g:apex_properties_folder='/home/arjuna/.vim-force'
+let g:apex_tooling_force_dot_com_path='/home/arjuna/Downloads/tooling-force.com-0.4.7.0.jar'
+
+let g:livepreview_previewer = 'mupdf'
 
 nnoremap <silent><F4> :NodeInspectStart<cr>
 nnoremap <silent><F5> :NodeInspectRun<cr>
@@ -121,14 +138,21 @@ let g:onedark_terminal_italics=1
 
 " emmet
 let g:user_emmet_mode='a'    "only enable insert mode functions.
+let g:user_emmet_leader_key='<C-_>'
 
-colorscheme onedark
-"set background=dark
+let g:gruvbox_termcolors=256
+let g:gruvbox_invert_selection = 0
+let g:gruvbox_contrast_dark='hard'
+let g:gruvbox_italics=1
+
+set background=dark
+colorscheme gruvbox
+set termguicolors
 
 " vim-vu config
 let g:vue_pre_processors = 'detect_on_enter'
 
-let g:airline_theme='onedark'
+let g:airline_theme='gruvbox'
 " --- vim go (polyglot) settings.
 let g:go_highlight_build_constraints = 1
 let g:go_highlight_extra_types = 1
@@ -528,7 +552,6 @@ set shortmess+=c
 " always show signcolumns
 set signcolumn=yes
 
-inoremap jk <ESC>
 nmap <C-b> :NERDTreeToggle<CR>
 " vmap <C-_> <plug>NERDCommenterToggle
 " nmap <C-_> <plug>NERDCommenterToggle
