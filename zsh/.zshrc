@@ -1,11 +1,14 @@
 # If you come from bash you might have to change your $PATH.
+export ASDF_DIR=/opt/asdf-vm
 export PATH=$HOME/bin:/usr/local/bin:~/.scripts:$PATH
 
+source ~/.zplug/init.zsh
+
 # Path to your oh-my-zsh installation.
-export ZSH="/home/arjuna/.oh-my-zsh"
+export ZSH="/home/lakshamana/.oh-my-zsh"
 
 # export $BROWSER
-export BROWSER="/usr/bin/vivaldi-stable"
+export BROWSER="/usr/bin/qutebrowser"
 
 export QTWEBENGINE_CHROMIUM_FLAGS="--blink-settings=darkMode=4,darkModeImagePolicy=2"
 
@@ -15,7 +18,7 @@ export CLOUDSDK_PYTHON=python2
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="avit"
+# ZSH_THEME="avit"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -77,14 +80,62 @@ HIST_STAMPS="yyyy-mm-dd"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
 	git 
-	aws 
-	gcloud 
-	zsh-autosuggestions
-	zsh-syntax-highlighting
+	# aws 
+	# gcloud 
   asdf
 )
 
+# zplug "nyquase/vi-mode"
+# zplug "zdharma/fast-syntax-highlighting", defer:2
+zplug "zsh-users/zsh-autosuggestions"
+zplug "zsh-users/zsh-syntax-highlighting"
+zplug "zsh-users/zsh-completions"
+# zplug "b4b4r07/zsh-vimode-visual", defer:3
+
 source $ZSH/oh-my-zsh.sh
+
+# Use vi mode
+bindkey -v
+export KEYTIMEOUT=1
+
+## Init
+setopt PROMPT_SUBST
+
+# Options
+THEME_PROMPT_PREFIX=${THEME_PROMPT_PREFIX:-''}
+THEME_VI_INS_MODE_SYMBOL=${THEME_VI_INS_MODE_SYMBOL:-'λ'}
+THEME_VI_CMD_MODE_SYMBOL=${THEME_VI_CMD_MODE_SYMBOL:-'ᐅ'}
+
+## Set symbol for the initial mode
+THEME_VI_MODE_SYMBOL="${THEME_VI_INS_MODE_SYMBOL}"
+
+# on keymap change, define the mode and redraw prompt
+zle-keymap-select() {
+	if [ "${KEYMAP}" = 'vicmd'  ]; then
+	THEME_VI_MODE_SYMBOL="${THEME_VI_CMD_MODE_SYMBOL}"
+	else
+	THEME_VI_MODE_SYMBOL="${THEME_VI_INS_MODE_SYMBOL}"
+	fi
+	zle reset-prompt
+}
+zle -N zle-keymap-select
+
+# reset to default mode at the end of line input reading
+zle-line-finish() {
+ THEME_VI_MODE_SYMBOL="${THEME_VI_INS_MODE_SYMBOL}"
+}
+zle -N zle-line-finish
+
+# Fix a bug when you C-c in CMD mode, you'd be prompted with CMD mode indicator
+# while in fact you would be in INS mode.
+# Fixed by catching SIGINT (C-c), set mode to INS and repropagate the SIGINT,
+# so if anything else depends on it, we will not break it.
+TRAPINT() {
+	THEME_VI_MODE_SYMBOL="${THEME_VI_INS_MODE_SYMBOL}"
+	return $(( 128 + $1  ))
+}
+
+PROMPT='$THEME_PROMPT_PREFIX%f%B%F{240}%1~%f%b %(?.%F{green}$THEME_VI_MODE_SYMBOL.%F{red}$THEME_VI_MODE_SYMBOL) '
 
 # User configuration
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -117,3 +168,4 @@ fpath=(${ASDF_DIR}/completions $fpath)
 # initialise completions with ZSH's compinit
 autoload -Uz compinit
 compinit
+zplug load
