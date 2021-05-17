@@ -1,9 +1,4 @@
 #!/bin/zsh
 
-syncfile='syncfile'
-for $line in $syncfile; do
-  local_cnf=`echo "$line" | awk '{print $1}'`
-  target_dir=`echo "$line" | awk '{print $2}'`
-
-  cp $local_cnf $target_dir
-done
+syncfile=`cat syncfile`
+xargs -n2 < syncfile echo cp
