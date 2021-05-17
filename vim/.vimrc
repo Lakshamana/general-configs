@@ -3,6 +3,8 @@ syntax on
 let &t_8f = "\<Esc>[38:2:%lu:%lu:%lum"
 let &t_8b = "\<Esc>[48:2:%lu:%lu:%lum"
 
+set hidden
+set ffs=unix
 set t_Co=256
 set ignorecase
 set hidden
@@ -33,7 +35,7 @@ set showcmd
 
 "highlight ColorColumn ctermbg=0 guibg=lightgrey
 
-call plug#begin('~/.nvim/plugged')
+call plug#begin('~/.vim/plugged')
 
 Plug 'neoclide/coc.nvim', { 'branch': 'release', 'do': 'npm install' }
 Plug 'editorconfig/editorconfig-vim'
@@ -89,10 +91,10 @@ Plug 'heavenshell/vim-jsdoc', {
 
 call plug#end()
 
-let g:apex_java_cmd = '/home/arjuna/.asdf/installs/java/openjdk-16.0.1/bin/java'
+let g:apex_java_cmd = '/home/lakshamana/.asdf/installs/java/openjdk-16.0.1/bin/java'
 let g:apex_temp_folder='/tmp'
-let g:apex_properties_folder='/home/arjuna/.vim-force'
-let g:apex_tooling_force_dot_com_path='/home/arjuna/Downloads/tooling-force.com-0.5.1.0.jar'
+let g:apex_properties_folder='/home/lakshamana/.vim-force'
+let g:apex_tooling_force_dot_com_path='/home/lakshamana/Downloads/tooling-force.com-0.5.1.0.jar'
 
 let g:livepreview_previewer = 'mupdf'
 
@@ -290,7 +292,7 @@ nnoremap <leader>l :wincmd l<CR>
 nnoremap <leader>u :UndotreeShow<CR>
 "nnoremap <leader>pv :wincmd v<bar> :Ex <bar> :vertical resize 30<CR>
 nnoremap <Leader>ps :Rg<SPACE>
-nnoremap <C-p> :GFiles<CR>
+nnoremap <C-p> :FZF<CR>
 nnoremap <Leader>pf :Files<CR>
 nnoremap <Leader><CR> :source ~/.config/nvim/init.vim<CR>
 nnoremap <Leader>+ :vertical resize +5<CR>
@@ -389,7 +391,7 @@ nmap <silent> [g <Plug>(coc-diagnostic-prev)
 nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
 " GoTo code navigation.
-nmap <silent> gd :call CocAction('jumpDefinition', 'tab drop')<CR>
+nmap <silent> gd :call CocAction('jumpDefinition')<CR>
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
@@ -543,6 +545,11 @@ let g:coc_global_extensions = [
   \ 'coc-eslint', 
   \ 'coc-prettier', 
   \ 'coc-json', 
+  \ 'coc-apex', 
+  \ 'coc-tabnine', 
+  \ 'coc-yaml', 
+  \ 'coc-css', 
+  \ 'coc-phpls', 
   \ ]
 
 nmap <Leader>p :Prettier<CR>
@@ -695,3 +702,52 @@ nnoremap <Leader>bb :buffers<CR>:buffer<Space>
 nnoremap <Leader>bd :buffers<CR>:bdelete<Space>
 nnoremap <leader>W :MatchupWhereAmI?<CR>
 com! -bar W exe 'w !sudo tee >/dev/null %:p:S' | setl nomod
+
+" Search in all currently opened buffers
+function! Vimgrepall(pattern)
+  call setqflist([])
+  exe 'bufdo vimgrepadd ' . a:pattern . ' %'
+  exe 'copen'
+endfunction
+
+command! -nargs=1 Vim call Vimgrepall(<f-args>)
+
+function! s:line_handler(l)
+  let keys = split(a:l, ':\t')
+  exec 'buf' keys[0]
+  exec keys[1]
+  normal! ^zz
+endfunction
+
+function! s:buffer_lines()
+  let res = []
+  for b in filter(range(1, bufnr('$')), 'buflisted(v:val)')
+    call extend(res, map(getbufline(b,0,"$"), 'b . ":\t" .  (v:key + 1) . ":\t" . v:val '))
+  endfor
+  return res
+endfunction
+
+command! FZFLines call fzf#run({
+\   'source':  <sid>buffer_lines(),
+\   'sink':    function('<sid>line_handler'),
+\   'options': '',
+\   'down':    '30%'
+\})
+
+nnoremap <leader>i :Vim<space>
+
+function! RangeSearch(direction)
+  call inputsave()
+  let g:srchstr = input(a:direction)
+  call inputrestore()
+  if strlen(g:srchstr) > 0
+    let g:srchstr = '\%>'.(line("'<")-1).'l'.
+          \ '\%<'.(line("'>")+1).'l'.
+          \ g:srchstr"'"))'>'">'"))
+  else
+    let g:srchstr = ''
+  endif
+endfunction
+
+vnoremap <silent> / :<C-U>call RangeSearch('/')<CR>:if strlen(g:srchstr) > 0\|exec '/'.g:srchstr\|endif<CR>
+vnoremap <silent> ? :<C-U>call RangeSearch('?')<CR>:if strlen(g:srchstr) > 0\|exec '?'.g:srchstr\|endif<CR>

@@ -8,7 +8,7 @@ source ~/.zplug/init.zsh
 export ZSH="/home/lakshamana/.oh-my-zsh"
 
 # export $BROWSER
-export BROWSER="/usr/bin/qutebrowser"
+export BROWSER="/usr/bin/google-chrome-stable"
 
 export QTWEBENGINE_CHROMIUM_FLAGS="--blink-settings=darkMode=4,darkModeImagePolicy=2"
 
@@ -79,7 +79,7 @@ HIST_STAMPS="yyyy-mm-dd"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-	git 
+	# git 
 	# aws 
 	# gcloud 
   asdf
@@ -162,6 +162,7 @@ PROMPT='$THEME_PROMPT_PREFIX%f%B%F{240}%1~%f%b %(?.%F{green}$THEME_VI_MODE_SYMBO
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias la="ls -a"
+alias ta="tmux -at 0"
 
 # append completions to fpath
 fpath=(${ASDF_DIR}/completions $fpath)
