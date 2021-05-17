@@ -1,5 +1,10 @@
 #!/bin/sh
 
+# constants
+JAVA_VERSION='openjdk-11.0.2'
+PHP_VERSION='latest'
+NODEJS_VERSION='12.13.0'
+
 # setup xresources preferences
 cp xresources/.Xmodmap ~
 xmodmap ~/.Xmodmap
@@ -23,13 +28,28 @@ i3-msg restart
 # install vim and asdf
 yay -Sy vim-git asdf-vm 
 
-# setup zsh
+# setup asdf
+adsf plugin-add nodejs
+adsf plugin-add php
+adsf plugin-add java
+
+# install java
+asdf install java $JAVA_VERSION
+echo "export JAVA_HOME=$HOME/.asdf/installs/java/$JAVA_VERSION"
+
+# install php
+asdf install php $PHP_VERSION
+
+# install nodejs
+asdf install nodejs $NODEJS_VERSION
+
+# setup zsh (ohmyzsh + zplug + config)
 sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
 cp zsh/.zshrc ~
 exec zsh
 
-# setup vim
+# setup vim (vim + vim-plug + plugins)
 if [ ! -d ~/.vim ]; then mkdir ~/.vim; fi
 mkdir -p ~/.vim/undodir
 mkdir -p ~/.vim/plugged
@@ -42,5 +62,5 @@ vim -c ':PlugInstall'
 # setup qutebrowser
 cp -rv qutebrowser ~/.config
 export BROWSER=''
-xdg-settings set default-web-browser /usr/share/applications/org.qutebrowser.qutebrowser.desktop
+xdg-settings set default-web-browser org.qutebrowser.qutebrowser.desktop
 export BROWSER='/usr/bin/qutebrowser'
