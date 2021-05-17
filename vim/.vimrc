@@ -8,7 +8,7 @@ set ffs=unix
 set t_Co=256
 set ignorecase
 set hidden
-set wildmenu
+set wildmenu wildmode=full
 set nocompatible
 set relativenumber
 set noerrorbells
@@ -545,7 +545,7 @@ let g:coc_global_extensions = [
   \ 'coc-eslint', 
   \ 'coc-prettier', 
   \ 'coc-json', 
-  \ 'coc-vetur', 
+  \ 'coc-apex', 
   \ 'coc-tabnine', 
   \ 'coc-yaml', 
   \ 'coc-css', 
@@ -699,6 +699,7 @@ nnoremap <Leader>bl :BlamerToggle<CR>
 nnoremap <A-/> :bnext<CR>
 nnoremap <A-,> :bprev<CR>
 nnoremap <Leader>bb :buffers<CR>:buffer<Space>
+nnoremap <Leader>bs :Buffers<CR>
 nnoremap <Leader>bd :buffers<CR>:bdelete<Space>
 nnoremap <leader>W :MatchupWhereAmI?<CR>
 com! -bar W exe 'w !sudo tee >/dev/null %:p:S' | setl nomod
