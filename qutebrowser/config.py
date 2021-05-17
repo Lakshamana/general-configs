@@ -41,8 +41,11 @@ def filter_yt(info: interceptor.Request):
 
 interceptor.register(filter_yt)
 
-config.unbind('<Ctrl-W>') 
+config.unbind('<Ctrl-W>')
 config.bind('<Ctrl-w>', 'fake-key <Ctrl-backspace>', mode='insert')
+
+config.unbind('<Ctrl-H>')
+config.bind('<Ctrl-h>', 'fake-key <backspace>', mode='insert')
 
 # c.input.spatial_navigation = True
 
