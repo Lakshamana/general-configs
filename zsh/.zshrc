@@ -10,8 +10,6 @@ export ZSH="/home/lakshamana/.oh-my-zsh"
 # export $BROWSER
 export BROWSER="/usr/bin/google-chrome-stable"
 
-export QTWEBENGINE_CHROMIUM_FLAGS="--blink-settings=darkMode=4,darkModeImagePolicy=2"
-
 export CLOUDSDK_PYTHON=python2
 
 # Set name of the theme to load --- if set to "random", it will
@@ -135,8 +133,6 @@ TRAPINT() {
 	return $(( 128 + $1  ))
 }
 
-PROMPT='$THEME_PROMPT_PREFIX%f%B%F{240}%1~%f%b %(?.%F{green}$THEME_VI_MODE_SYMBOL.%F{red}$THEME_VI_MODE_SYMBOL) '
-
 # User configuration
 # export MANPATH="/usr/local/man:$MANPATH"
 
@@ -162,11 +158,19 @@ PROMPT='$THEME_PROMPT_PREFIX%f%B%F{240}%1~%f%b %(?.%F{green}$THEME_VI_MODE_SYMBO
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias la="ls -a"
-alias ta="tmux -at 0"
+alias ta="tmux attach -t 0"
 
 # append completions to fpath
 fpath=(${ASDF_DIR}/completions $fpath)
 # initialise completions with ZSH's compinit
 autoload -Uz compinit
+
+ZSH_THEME_GIT_PROMPT_PREFIX=" %{$fg[green]%}("
+ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_DIRTY=" %{$fg[red]%}✗)%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_CLEAN=" %{$fg[green]%}✔)%{$reset_color%}"
+
+PROMPT='$THEME_PROMPT_PREFIX%f%B%F{240}%1~%f%b$(git_prompt_info) %(?.%F{green}$THEME_VI_MODE_SYMBOL.%F{red}$THEME_VI_MODE_SYMBOL) '
+
 compinit
 zplug load

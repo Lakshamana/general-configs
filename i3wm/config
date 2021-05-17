@@ -45,6 +45,7 @@ bindsym $mod+z exec --no-startup-id morc_menu
 exec --no-startup-id volumeicon
 # bindsym $mod+Ctrl+m exec terminal -e 'alsamixer'
 # exec --no-startup-id "alsactl restore"
+exec --no-startup-id pulseaudio --kill
 exec --no-startup-id pulseaudio
 #exec --no-startup-id pa-applet
 bindsym $mod+Ctrl+m exec pavucontrol
@@ -77,8 +78,8 @@ bindsym $mod+Ctrl+x --release exec --no-startup-id xkill
 
 # bindsym --no-startup-id "xcape -t 300 -e 'Control_L=Escape' &"
 
-bindcode $mod+Ctrl+57 --release exec --no-startup-id ~/.scripts/switchkbl
-bindcode $mod+Ctrl+58 --release exec --no-startup-id ~/.scripts/switchkbv
+bindcode $mod+Ctrl+44 --release exec --no-startup-id ~/.scripts/switchkbl
+bindcode $mod+Ctrl+45 --release exec --no-startup-id ~/.scripts/switchkbv
 
 # change focus
 bindsym $mod+j focus left
@@ -283,7 +284,7 @@ bindsym $mod+9 exec --no-startup-id blurlock
 exec --no-startup-id "xrandr --output Virtual1 --mode 1360x768"
 
 # # Set screen default background image
-# exec --no-startup-id "feh --bg-scale /home/arjuna/Imagens/eclipse.jpg"
+exec --no-startup-id "feh --bg-scale /usr/share/backgrounds/adapta_i3.jpg"
 
 # Autostart applications
 exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1

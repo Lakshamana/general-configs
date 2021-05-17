@@ -1,4 +1,4 @@
 #!/bin/zsh
 
-syncfile=`cat syncfile`
-xargs -n2 < syncfile echo cp
+syncfile=`cat syncfile | sed "s|~|$HOME|g"`
+echo "$syncfile" | xargs -n 2 sh -c 'cp $0 $1'
