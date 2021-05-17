@@ -8,7 +8,7 @@ source ~/.zplug/init.zsh
 export ZSH="/home/lakshamana/.oh-my-zsh"
 
 # export $BROWSER
-export BROWSER="/usr/bin/google-chrome-stable"
+export BROWSER="/usr/bin/qutebrowser"
 
 export CLOUDSDK_PYTHON=python2
 
