@@ -91,10 +91,10 @@ Plug 'heavenshell/vim-jsdoc', {
 
 call plug#end()
 
-let g:apex_java_cmd = '/home/lakshamana/.asdf/installs/java/openjdk-16.0.1/bin/java'
+let g:apex_java_cmd=$HOME.'/.asdf/installs/java/openjdk-16.0.1/bin/java'
 let g:apex_temp_folder='/tmp'
-let g:apex_properties_folder='/home/lakshamana/.vim-force'
-let g:apex_tooling_force_dot_com_path='/home/lakshamana/Downloads/tooling-force.com-0.5.1.0.jar'
+let g:apex_properties_folder=$HOME.'/.vim-force'
+let g:apex_tooling_force_dot_com_path=$HOME.'/Downloads/tooling-force.com-0.5.1.0.jar'
 
 let g:livepreview_previewer = 'mupdf'
 
