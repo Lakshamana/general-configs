@@ -12,7 +12,7 @@ sudo cp i3wm/i3status.conf /etc
 # update pacman mirrors and first installs
 sudo pacman-mirrors -f
 sudo pacman -Syyu
-sudo pacman -Sy yay maim xclip zsh qutebrowser curl alacritty the_silver_searcher ripgrep
+sudo pacman -Sy yay maim xclip zsh qutebrowser curl alacritty the_silver_searcher ripgrep zathura
 
 # setup alacritty
 cp alacritty/.alacritty ~
@@ -41,3 +41,6 @@ vim -c ':PlugInstall'
 
 # setup qutebrowser
 cp -rv qutebrowser ~/.config
+export BROWSER=''
+xdg-settings set default-web-browser /usr/share/applications/org.qutebrowser.qutebrowser.desktop
+export BROWSER='/usr/bin/qutebrowser'

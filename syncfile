@@ -1,0 +1,7 @@
+~/.Xmodmap xresources
+~/.i3/config i3wm
+/etc/i3status.conf i3wm
+~/.alacritty alacritty
+~/.zshrc zsh
+~/.vimrc vim
+~/.config/qutebrowser/config.py qutebrowser

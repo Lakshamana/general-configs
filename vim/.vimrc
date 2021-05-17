@@ -545,7 +545,7 @@ let g:coc_global_extensions = [
   \ 'coc-eslint', 
   \ 'coc-prettier', 
   \ 'coc-json', 
-  \ 'coc-apex', 
+  \ 'coc-vetur', 
   \ 'coc-tabnine', 
   \ 'coc-yaml', 
   \ 'coc-css', 
