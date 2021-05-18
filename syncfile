@@ -5,3 +5,4 @@
 ~/.zshrc zsh
 ~/.vimrc vim
 ~/.config/qutebrowser/config.py qutebrowser
+~/.scripts/* i3wm/.scripts
