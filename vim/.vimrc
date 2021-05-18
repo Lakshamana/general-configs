@@ -499,8 +499,8 @@ nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 "nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
 " Sweet Sweet FuGITive
-nnoremap <leader>g2 :diffget //2<CR>
-nnoremap <leader>g3 :diffget //3<CR>
+nnoremap <leader>gf :diffget //2<CR>
+nnoremap <leader>gj :diffget //3<CR>
 nnoremap <leader>gs :Git<CR>
 nnoremap <leader>gc :Gcommit -v -q<CR>
 nnoremap <leader>ga :Gcommit --amend<CR>
