@@ -20,7 +20,7 @@ sudo pacman -Syyu
 sudo pacman -Sy yay maim xclip zsh qutebrowser curl alacritty the_silver_searcher ripgrep zathura
 
 # setup alacritty
-cp alacritty/.alacritty ~
+cp alacritty/.alacritty.yml ~
 
 # restart i3
 i3-msg restart
@@ -28,26 +28,26 @@ i3-msg restart
 # install vim and asdf
 yay -Sy vim-git asdf-vm 
 
+# setup zsh (ohmyzsh + zplug + config)
+sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
+cp zsh/.zshrc ~
+exec zsh
+
 # setup asdf
-adsf plugin-add nodejs
-adsf plugin-add php
-adsf plugin-add java
+asdf plugin-add nodejs
+asdf plugin-add php
+asdf plugin-add java
 
 # install java
 asdf install java $JAVA_VERSION
-echo "export JAVA_HOME=$HOME/.asdf/installs/java/$JAVA_VERSION"
+echo "export JAVA_HOME=$HOME/.asdf/installs/java/$JAVA_VERSION" >> ~/.zshrc
 
 # install php
 asdf install php $PHP_VERSION
 
 # install nodejs
 asdf install nodejs $NODEJS_VERSION
-
-# setup zsh (ohmyzsh + zplug + config)
-sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
-cp zsh/.zshrc ~
-exec zsh
 
 # setup vim (vim + vim-plug + plugins)
 if [ ! -d ~/.vim ]; then mkdir ~/.vim; fi
