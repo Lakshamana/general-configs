@@ -514,7 +514,7 @@ nnoremap <leader>gl :silent! Git log<CR>
 nnoremap <leader>gp :Ggrep<Space>
 nnoremap <leader>gm :Gmove<Space>
 nnoremap <leader>gb :Git branch<Space>
-nnoremap <leader>go :Git checkout<Space>
+nnoremap <leader>go :GBranches<CR>
 nnoremap <leader>gps :Git push<CR>
 nnoremap <leader>gpl :Git pull<CR>
 
