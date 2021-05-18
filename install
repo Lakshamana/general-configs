@@ -18,6 +18,7 @@ show_usage() {
 _help_mode=`echo $@ | grep -e '-h\|--help'`
 if [[ $_help_mode != '' ]]; then
       show_usage
+      exit 0
 fi
 
 # allow verbose mode by running -v or --verbose
