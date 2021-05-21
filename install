@@ -30,7 +30,7 @@ log() {
       fi
 }
 
-# constants
+# set constants
 JAVA_VERSION='openjdk-11.0.2'
 PHP_VERSION='latest'
 NODEJS_VERSION='12.13.0'
@@ -123,3 +123,6 @@ export BROWSER=''
 xdg-settings set default-web-browser org.qutebrowser.qutebrowser.desktop
 export BROWSER='/usr/bin/qutebrowser'
 log 'set qutebrowser config and set as default web browser'
+
+# miscellaneous
+cp ssh/config.example ~/.ssh/config

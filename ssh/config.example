@@ -1,0 +1,4 @@
+Host whatever.com
+  HostName whatever.com
+  User me
+  IdentityFile ~/.ssh/id_rsa
