@@ -5,6 +5,7 @@ let &t_8b = "\<Esc>[48:2:%lu:%lu:%lum"
 
 set hidden
 set ffs=unix
+set term=xterm-256color
 set t_Co=256
 set ignorecase
 set hidden
@@ -478,7 +479,8 @@ command! -nargs=0 OR   :call     CocAction('runCommand', 'Editor.action.organize
 " Add (Neo)Vim's native statusline support.
 " NOTE: Please see `:h coc-status` for integrations with external plugins that
 " provide custom statusline: lightline.vim, vim-airline.
-set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+" set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+set statusline^=vim-airline
 
 " Mappings for CoCList
 " Show all diagnostics.
