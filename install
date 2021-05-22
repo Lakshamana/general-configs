@@ -83,8 +83,8 @@ cp zsh/.zshrc ~
 log 'updated zsh conf. Will restart at the end...'
 
 log 'downloading vim and asdf...'
-# install vim and asdf
-yay -Sy vim-git asdf-vm 
+# install asdf
+yay -Sy asdf-vm 
 
 # setup asdf
 asdf plugin-add nodejs
@@ -105,11 +105,20 @@ asdf install nodejs $NODEJS_VERSION
 log 'setup nodejs asdf env'
 
 # setup vim (vim + vim-plug + plugins)
+log 'cloning vim repo...'
+git clone git@github.com:vim/vim.git ~/git/vim
+
+log 'compiling vim...'
+cd ~/git/vim
+./configure --with-features --enable-pythoninterp=yes --enable-python3interp=yes
+make && sudo make install
+
+log 'setting up vim basic conf...'
 if [ ! -d ~/.vim ]; then mkdir ~/.vim; fi
 mkdir -p ~/.vim/undodir
 mkdir -p ~/.vim/plugged
 cp vim/.vimrc ~
-log 'setup vim basic conf'
+
 log 'downloading vim-plug now...'
 curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
