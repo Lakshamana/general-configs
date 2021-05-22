@@ -108,9 +108,18 @@ log 'setup nodejs asdf env'
 log 'cloning vim repo...'
 git clone git@github.com:vim/vim.git ~/git/vim
 
-log 'compiling vim...'
+log 'configuring vim...'
 cd ~/git/vim
-./configure --with-features --enable-pythoninterp=yes --enable-python3interp=yes
+./configure \
+      --with-features \
+      --enable-pythoninterp=yes \
+      --enable-python3interp=yes \
+      --enable-rubyinterp=yes \
+      --enable-luainterp=yes \
+      --enable-perlinterp=yes \
+      --enable-terminal=yes
+
+log 'compiling vim...'
 make && sudo make install
 
 log 'setting up vim basic conf...'
