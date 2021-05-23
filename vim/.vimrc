@@ -77,8 +77,8 @@ Plug 'andymass/vim-matchup'
 Plug 'etdev/vim-hexcolor'
 Plug 'ap/vim-buftabline'
 Plug 'jremmen/vim-ripgrep'
-Plug 'eliba2/vim-node-inspect'
 Plug 'nicklasos/vimphphtml'
+Plug 'puremourning/vimspector'
 Plug 'turbio/bracey.vim', { 'do': 'npm i --prefix server' }
 Plug 'xuhdev/vim-latex-live-preview'
 Plug 'makerj/vim-pdf'
@@ -89,8 +89,11 @@ Plug 'heavenshell/vim-jsdoc', {
   \ 'for': ['javascript', 'javascript.jsx','typescript'], 
   \ 'do': 'make install'
 \}
+Plug 'm-pilia/vim-ccls'
 
 call plug#end()
+
+let g:bracey_refresh_on_save = 1
 
 let g:apex_java_cmd=$HOME.'/.asdf/installs/java/openjdk-16.0.1/bin/java'
 let g:apex_temp_folder='/tmp'
@@ -479,8 +482,7 @@ command! -nargs=0 OR   :call     CocAction('runCommand', 'Editor.action.organize
 " Add (Neo)Vim's native statusline support.
 " NOTE: Please see `:h coc-status` for integrations with external plugins that
 " provide custom statusline: lightline.vim, vim-airline.
-" set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
-set statusline^=vim-airline
+set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
 " Mappings for CoCList
 " Show all diagnostics.
@@ -593,6 +595,7 @@ let g:NERDTreeGitStatusWithFlags = 1
 let g:NERDTreeIgnore = ['^node_modules$', '^dist$', '.nuxt$']
 
 " vim terminal
+let g:terminal_key='<C-l>'
 let g:terminal_cwd=2
 let g:terminal_close=1
 let g:terminal_list=0

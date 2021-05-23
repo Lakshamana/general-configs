@@ -1,0 +1,26 @@
+{
+  "salesforcedx-vscode-apex.java.home": "/home/lakshamana/.asdf/installs/java/openjdk-11.0.2",
+  "languageserver": {
+    "ccls": {
+      "command": "ccls",
+      "filetypes": [
+        "c",
+        "cpp",
+        "objc",
+        "objcpp"
+      ],
+      "rootpatterns": [
+        ".ccls",
+        "compile_commands.json",
+        ".vim/",
+        ".git/",
+        ".hg/"
+      ],
+      "initializationoptions": {
+        "cache": {
+          "directory": "/tmp/ccls"
+        }
+      }
+    }
+  }
+}

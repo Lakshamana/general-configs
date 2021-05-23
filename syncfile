@@ -4,5 +4,6 @@
 ~/.alacritty.yml alacritty
 ~/.zshrc zsh
 ~/.vimrc vim
+~/.vim/coc-settings.json vim/coc
 ~/.config/qutebrowser/config.py qutebrowser
 ~/.scripts/* i3wm/.scripts

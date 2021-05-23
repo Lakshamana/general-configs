@@ -127,6 +127,7 @@ if [ ! -d ~/.vim ]; then mkdir ~/.vim; fi
 mkdir -p ~/.vim/undodir
 mkdir -p ~/.vim/plugged
 cp vim/.vimrc ~
+cp vim/coc/coc-settings.json ~/.vim
 
 log 'downloading vim-plug now...'
 curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
