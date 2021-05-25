@@ -193,6 +193,7 @@ let g:netrw_banner = 0
 let g:netrw_winsize = 25
 
 let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.8 } }
+let g:fzf_preview_window = ['right:hidden', 'ctrl-/']
 let $FZF_DEFAULT_OPTS='--reverse'
 let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -l -g ""'
 
@@ -288,17 +289,18 @@ let g:multi_cursor_quit_key            = '<Esc>'
 nnoremap <leader>gc :GCheckout<CR>
 nnoremap <leader>ghw :h <C-R>=expand("<cword>")<CR><CR>
 nnoremap <leader>prw :CocSearch <C-R>=expand("<cword>")<CR><CR>
-nnoremap <leader>pw :Rg <C-R>=expand("<cword>")<CR><CR>
+nnoremap <leader>pw :Ag <C-R>=expand("<cword>")<CR><CR>
+nnoremap <leader>ph :Qdo %s/<C-R>=expand("<cword>")<CR>/
 nnoremap <leader>h :wincmd h<CR>
 nnoremap <leader>j :wincmd j<CR>
 nnoremap <leader>k :wincmd k<CR>
 nnoremap <leader>l :wincmd l<CR>
 nnoremap <leader>u :UndotreeShow<CR>
-"nnoremap <leader>pv :wincmd v<bar> :Ex <bar> :vertical resize 30<CR>
-nnoremap <Leader>ps :Rg<SPACE>
+" nnoremap <leader>pv :wincmd v<bar> :Ex <bar> :vertical resize 30<CR>
+nnoremap <Leader>ps :Ag<SPACE>
 nnoremap <C-p> :FZF<CR>
 nnoremap <Leader>pf :Files<CR>
-nnoremap <Leader><CR> :source ~/.config/nvim/init.vim<CR>
+nnoremap <Leader><CR> :source ~/.vimrc<CR>
 nnoremap <Leader>+ :vertical resize +5<CR>
 nnoremap <Leader>- :vertical resize -5<CR>
 nnoremap <Leader>rp :resize 100<CR>
@@ -549,7 +551,6 @@ let g:coc_global_extensions = [
   \ 'coc-prettier', 
   \ 'coc-json', 
   \ 'coc-vetur', 
-  \ 'coc-ccls', 
   \ 'coc-apex', 
   \ 'coc-tabnine', 
   \ 'coc-yaml', 
@@ -600,7 +601,6 @@ let g:terminal_key='<C-l>'
 let g:terminal_cwd=2
 let g:terminal_close=1
 let g:terminal_list=0
-let g:terminal_kill='term'
 
 " vim-prettier
 let g:prettier#quickfix_enabled = 0
@@ -704,8 +704,8 @@ nnoremap <Leader>bl :BlamerToggle<CR>
 " buftabline
 nnoremap <A-/> :bnext<CR>
 nnoremap <A-,> :bprev<CR>
-nnoremap <Leader>bb :buffers<CR>:buffer<Space>
-nnoremap <Leader>bs :Buffers<CR>
+nnoremap <Leader>bb :Buffers<CR>
+" nnoremap <Leader>bs :Buffers<CR>
 nnoremap <Leader>bd :buffers<CR>:bdelete<Space>
 nnoremap <leader>W :MatchupWhereAmI?<CR>
 com! -bar W exe 'w !sudo tee >/dev/null %:p:S' | setl nomod
@@ -743,6 +743,15 @@ command! FZFLines call fzf#run({
 
 nnoremap <leader>i :Vim<space>
 
+autocmd ExitPre * call <sid>TermForceCloseAll()
+function! s:TermForceCloseAll() abort
+  echo 'exec term force close all'
+  let term_bufs = filter(range(1, bufnr('$')), 'getbufvar(v:val, "&buftype") == "terminal"')
+  for t in term_bufs
+    exec 'bd! '.t
+  endfor
+endfunction
+
 function! RangeSearch(direction)
   call inputsave()
   let g:srchstr = input(a:direction)
@@ -758,3 +767,4 @@ endfunction
 
 vnoremap <silent> / :<C-U>call RangeSearch('/')<CR>:if strlen(g:srchstr) > 0\|exec '/'.g:srchstr\|endif<CR>
 vnoremap <silent> ? :<C-U>call RangeSearch('?')<CR>:if strlen(g:srchstr) > 0\|exec '?'.g:srchstr\|endif<CR>
+nmap <leader>qq :q!<CR>
