@@ -19,8 +19,8 @@ window:
   # Specified in number of columns/lines, not pixels. If both are zero this
   # setting is ignored.
   dimensions:
-    columns: 85
-    lines: 85
+    columns: 100
+    lines: 100
 
   # Window padding (changes require restart)
   #
@@ -56,7 +56,7 @@ window:
 scrolling:
   # maximum number of lines in the scrollback buffer. Specifying '0' will
   # disable scrolling.
-  history: 0
+  history: 1000
 
   # Number of lines the viewport will move for every line scrolled when
   # scrollback is enabled (history > 0).
