@@ -4,6 +4,7 @@ let &t_8f = "\<Esc>[38:2:%lu:%lu:%lum"
 let &t_8b = "\<Esc>[48:2:%lu:%lu:%lum"
 
 set hidden
+set ff=unix
 set ffs=unix
 set term=xterm-256color
 set t_Co=256
@@ -505,6 +506,8 @@ nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 "nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
 " Sweet Sweet FuGITive
+let g:fugitive_conflict_x=1
+
 nnoremap <leader>gf :diffget //2<CR>
 nnoremap <leader>gj :diffget //3<CR>
 nnoremap <leader>gs :Git<CR>
@@ -518,7 +521,7 @@ nnoremap <leader>gr :Gread<CR>
 nnoremap <leader>gw :Gwrite<CR><CR>
 nnoremap <leader>gl :silent! Git log<CR>
 nnoremap <leader>gp :Ggrep<Space>
-nnoremap <leader>gm :Gmove<Space>
+nnoremap <leader>gm :Git merge<Space>
 nnoremap <leader>gb :Git branch<Space>
 nnoremap <leader>go :GBranches<CR>
 nnoremap <leader>gps :Git push<CR>
