@@ -1,4 +1,6 @@
 ~/.Xmodmap xresources
+~/.xinit xresources
+~/.Xresources xresources
 ~/.i3/config i3wm
 /etc/i3status.conf i3wm
 ~/.alacritty.yml alacritty
