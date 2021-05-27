@@ -770,4 +770,25 @@ endfunction
 
 vnoremap <silent> / :<C-U>call RangeSearch('/')<CR>:if strlen(g:srchstr) > 0\|exec '/'.g:srchstr\|endif<CR>
 vnoremap <silent> ? :<C-U>call RangeSearch('?')<CR>:if strlen(g:srchstr) > 0\|exec '?'.g:srchstr\|endif<CR>
-nmap <leader>qq :q!<CR>
+
+function! s:get_visual_selection()
+    " Why is this not a built-in Vim script function?!
+    let [line_start, column_start] = getpos("'<")[1:2]
+    let [line_end, column_end] = getpos("'>")[1:2]
+    let lines = getline(line_start, line_end)
+    if len(lines) == 0
+        return ''
+    endif
+    let lines[-1] = lines[-1][: column_end - (&selection == 'inclusive' ? 1 : 2)]
+    let lines[0] = lines[0][column_start - 1:]
+    return join(lines, "\n")
+endfunction
+
+command! -nargs=* -range=% GetSelection :exec "Ag ".s:get_visual_selection()
+command! -nargs=* -range=% GetSelectionFile :exec '/'.s:get_visual_selection()
+vnoremap <leader>pw :GetSelection<CR>
+vnoremap <leader>s :GetSelectionFile<CR>
+
+nnoremap <C-A> :%y+<CR>
+nnoremap <Leader>vv "+yg_
+nnoremap <Leader>V "+yy
