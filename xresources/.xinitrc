@@ -63,4 +63,6 @@ get_session(){
 	echo "dbus-launch ${dbus_args[*]}"
 }
 
+udiskie --no-automount --tray &
+
 exec $(get_session "$1")

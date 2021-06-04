@@ -1,4 +1,6 @@
 ~/.Xmodmap xresources
+~/.tmux.conf tmux
+/etc/elinks.conf elinks
 ~/.xinitrc xresources
 ~/.Xresources xresources
 ~/.i3/config i3wm
