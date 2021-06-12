@@ -10,4 +10,5 @@
 ~/.vimrc vim
 ~/.vim/coc-settings.json vim/coc
 ~/.config/qutebrowser/config.py qutebrowser
+~/.config/qutebrowser/greasemonkey/youtube-skip-ad.js qutebrowser/greasemonkey
 ~/.scripts/* i3wm/.scripts

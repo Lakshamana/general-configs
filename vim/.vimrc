@@ -74,7 +74,6 @@ Plug 'jremmen/vim-ripgrep'
 Plug 'nicklasos/vimphphtml'
 Plug 'puremourning/vimspector'
 Plug 'turbio/bracey.vim', { 'do': 'npm i --prefix server' }
-Plug 'xuhdev/vim-latex-live-preview'
 Plug 'makerj/vim-pdf'
 Plug 'tpope/vim-haml'
 Plug 'neowit/vim-force.com'
@@ -82,7 +81,23 @@ Plug 'APZelos/blamer.nvim'
 Plug 'puremourning/vimspector'
 Plug 'm-pilia/vim-ccls'
 Plug 'skywind3000/vim-terminal-help'
+Plug 'felipec/notmuch-vim', { 'do': 'gem install mail' }
+Plug 'lervag/vimtex'
 call plug#end()
+
+let g:vimtex_view_method = 'zathura'
+let g:vimtex_compiler_latexmk = { 
+        \ 'executable' : 'latexmk',
+        \ 'options' : [ 
+        \   '-xelatex',
+        \   '-file-line-error',
+        \   '-synctex=1',
+        \   '-interaction=nonstopmode',
+        \ ],
+        \}
+let g:vimtex_quickfix_ignore_filters = [
+      \ 'Underfull',
+      \]
 
 let enable_alt_mappings = ['d', 'n', 'j', 'k', '/', ',']
 function! s:enable_alt_map(char)
@@ -104,7 +119,7 @@ let g:apex_temp_folder='/tmp'
 let g:apex_properties_folder=$HOME.'/.vim-force'
 let g:apex_tooling_force_dot_com_path=$HOME.'/Downloads/tooling-force.com-0.5.1.0.jar'
 
-let g:livepreview_previewer = 'mupdf'
+let g:livepreview_previewer = 'zathura'
 
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
@@ -764,9 +779,11 @@ endfunction
 
 command! -nargs=* -range=% GetSelection :exec 'Ag '.s:get_visual_selection()
 command! -nargs=* -range=% GetSelectionFile :exec '/'.s:get_visual_selection()
+
 vnoremap <leader>pw :GetSelection<CR>
 vnoremap <leader>s :GetSelectionFile<CR>
 nnoremap <leader>H :%s/<C-R>=expand("<cword>")<CR>/
+vnoremap <leader>H y; :%s/<C-R><C-O>0/
 
 nnoremap <C-A> :%y+<CR>
 nnoremap <Leader>vv "+yg_
@@ -782,3 +799,6 @@ tmap <silent> <M-h> <C-,>
 tmap <silent> <M-l> <C-/>
 
 nnoremap <silent> <Leader>@ :echo @%<CR>
+set conceallevel=0
+nnoremap zh 16zh
+nnoremap zl 16zl
