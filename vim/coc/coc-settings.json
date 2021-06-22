@@ -1,5 +1,6 @@
 {
-  "salesforcedx-vscode-apex.java.home": "/home/lakshamana/.asdf/installs/java/openjdk-11.0.2",
+  "coc.preferences.useQuickfixForLocations": false,
+  "coc.preferences.listOfWorkspaceEdit": "none",
   "languageserver": {
     "ccls": {
       "command": "ccls",

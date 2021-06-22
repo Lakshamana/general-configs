@@ -76,13 +76,14 @@ Plug 'puremourning/vimspector'
 Plug 'turbio/bracey.vim', { 'do': 'npm i --prefix server' }
 Plug 'makerj/vim-pdf'
 Plug 'tpope/vim-haml'
-Plug 'neowit/vim-force.com'
 Plug 'APZelos/blamer.nvim'
 Plug 'puremourning/vimspector'
 Plug 'm-pilia/vim-ccls'
 Plug 'skywind3000/vim-terminal-help'
 Plug 'felipec/notmuch-vim', { 'do': 'gem install mail' }
 Plug 'lervag/vimtex'
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npm install' }
+Plug 'bingaman/vim-sparkup'
 call plug#end()
 
 let g:vimtex_view_method = 'zathura'
@@ -113,11 +114,6 @@ tnoremap <silent> <C-q> <C-\><C-n>
 let g:vimspector_enable_mappings = 'HUMAN'
 
 let g:bracey_refresh_on_save = 1
-
-let g:apex_java_cmd=$HOME.'/.asdf/installs/java/openjdk-16.0.1/bin/java'
-let g:apex_temp_folder='/tmp'
-let g:apex_properties_folder=$HOME.'/.vim-force'
-let g:apex_tooling_force_dot_com_path=$HOME.'/Downloads/tooling-force.com-0.5.1.0.jar'
 
 let g:livepreview_previewer = 'zathura'
 
@@ -423,6 +419,8 @@ let g:coc_snippet_next = '<c-j>'
 " Use <C-k> for jump to previous placeholder, it's default of coc.nvim
 let g:coc_snippet_prev = '<c-k>'
 
+let g:coc_auto_copen = 0
+
 " Use <C-j> for both expand and jump (make expand higher priority.)
 imap <C-j> <Plug>(coc-snippets-expand-jump)
 
@@ -572,19 +570,15 @@ let g:coc_global_extensions = [
   \ 'coc-prettier', 
   \ 'coc-json', 
   \ 'coc-vetur', 
-  \ 'coc-apex', 
   \ 'coc-tabnine', 
   \ 'coc-yaml', 
   \ 'coc-css', 
   \ 'coc-phpls', 
   \ ]
 
-nmap <Leader>p :Prettier<CR>
-nmap <Leader>P :CocPrettier<CR>
+nmap <leader>pt :Prettier<CR>
 " from readme
 " if hidden is not set, TextEdit might fail.
-set hidden " Some servers have issues with backup files, see #649 set nobackup set nowritebackup  Better display for messages set cmdheight=2  You will have bad experience for diagnostic messages when it's default 4000.
-set updatetime=300
 
 " don't give |ins-completion-menu| messages.
 set shortmess+=c
@@ -624,16 +618,6 @@ let g:terminal_close=1
 let g:terminal_list=0
 
 " vim-prettier
-let g:prettier#quickfix_enabled = 0
-let g:prettier#quickfix_auto_focus = 0
-" let g:prettier#autoformat = 1
-let g:prettier#autoformat_config_present = 1
-let g:prettier#autoformat_config_files = [
-  \ '.prettierrc',
-  \ '.prettierrc.json',
-  \ '.prettierrc.js',
-  \ '.prettierrc.toml',
-  \ ]
 " Max line length that prettier will wrap on: a number or 'auto' (use
 " textwidth).
 " default: 'auto'
@@ -667,7 +651,7 @@ let g:prettier#config#html_whitespace_sensitivity = 'css'
 
 " false|true
 " default: 'false'
-let g:prettier#config#require_pragma = 'false'
+let g:prettier#config#require_pragma = 'true'
 
 let g:prettier#config#arrow_parens = 'avoid'
 let g:prettier#config#single_quote = 'true'
@@ -675,6 +659,16 @@ let g:prettier#config#bracket_spacing = 'true'
 let g:prettier#config#trailing_comma = 'none'
 let g:prettier#config#print_width = 100
 let g:prettier#config#semi = 'false'
+let g:prettier#quickfix_enabled = 0
+let g:prettier#quickfix_auto_focus = 0
+let g:prettier#autoformat_require_pragma = 0
+let g:prettier#autoformat_config_present = 1
+let g:prettier#autoformat_config_files = [
+  \ '.prettierrc',
+  \ '.prettierrc.json',
+  \ '.prettierrc.js',
+  \ '.prettierrc.toml',
+  \ ]
 
 " Custom mappings
 inoremap <C-H> <C-W>
@@ -737,8 +731,6 @@ command! FZFLines call fzf#run({
 \   'down':    '30%'
 \})
 
-nnoremap <leader>i :Vim<space>
-
 autocmd ExitPre * call <sid>TermForceCloseAll()
 function! s:TermForceCloseAll() abort
   echo 'exec term force close all'
@@ -780,6 +772,8 @@ endfunction
 command! -nargs=* -range=% GetSelection :exec 'Ag '.s:get_visual_selection()
 command! -nargs=* -range=% GetSelectionFile :exec '/'.s:get_visual_selection()
 
+nnoremap <leader>i :Vim<space>
+nnoremap <leader>I :Vim<space><C-R>=expand("<cword>")<CR><CR>
 vnoremap <leader>pw :GetSelection<CR>
 vnoremap <leader>s :GetSelectionFile<CR>
 nnoremap <leader>H :%s/<C-R>=expand("<cword>")<CR>/
@@ -799,6 +793,7 @@ tmap <silent> <M-h> <C-,>
 tmap <silent> <M-l> <C-/>
 
 nnoremap <silent> <Leader>@ :echo @%<CR>
-set conceallevel=0
 nnoremap zh 16zh
 nnoremap zl 16zl
+
+set conceallevel=0

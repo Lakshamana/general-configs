@@ -6,6 +6,7 @@ source ~/.zplug/init.zsh
 
 # Path to your oh-my-zsh installation.
 export ZSH="/home/lakshamana/.oh-my-zsh"
+export EDITOR='vim'
 
 # export $BROWSER
 export BROWSER="/usr/bin/qutebrowser"
