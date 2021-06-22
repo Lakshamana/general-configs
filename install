@@ -85,7 +85,7 @@ log 'updated zsh conf. Will restart at the end...'
 
 log 'downloading vim and asdf...'
 # install asdf
-yay -Sy asdf-vm 
+yay -Sy asdf-vm elinks-git
 
 # setup asdf
 asdf plugin-add nodejs
@@ -143,6 +143,10 @@ export BROWSER=''
 xdg-settings set default-web-browser org.qutebrowser.qutebrowser.desktop
 export BROWSER='/usr/bin/qutebrowser'
 log 'set qutebrowser config and set as default web browser'
+
+# setup elinks
+log 'setting up elinks...'
+sudo cp elinks/elinks.conf /etc
 
 # miscellaneous
 cp ssh/config.example ~/.ssh/config
