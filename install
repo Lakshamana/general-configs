@@ -58,6 +58,7 @@ sudo pacman -Sy \
       yay \
       maim \
       xclip \
+      base-devel \
       zsh \
       qutebrowser \
       curl \
