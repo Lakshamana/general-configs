@@ -796,4 +796,18 @@ nnoremap <silent> <Leader>@ :echo @%<CR>
 nnoremap zh 16zh
 nnoremap zl 16zl
 
+function EnterOrIndentTag()
+  let line = getline(".")
+  let col = getpos(".")[2]
+  let before = line[col-2]
+  let after = line[col-1]
+
+  if before == ">" && after == "<"
+    return "\<CR>\<C-o>O\<Tab>"
+  endif
+    return "\<CR>"
+endfunction
+
+inoremap <expr> <CR> EnterOrIndentTag()
+
 set conceallevel=0
