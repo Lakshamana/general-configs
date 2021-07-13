@@ -8,6 +8,7 @@
 ~/.alacritty.yml alacritty
 ~/.zshrc zsh
 ~/.vimrc vim
+~/.config/nvim/init.vim nvim/init.vim
 ~/.vim/coc-settings.json vim/coc
 ~/.config/qutebrowser/config.py qutebrowser
 ~/.config/qutebrowser/greasemonkey/youtube-skip-ad.js qutebrowser/greasemonkey

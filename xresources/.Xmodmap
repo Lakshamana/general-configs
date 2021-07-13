@@ -13,4 +13,3 @@ keycode 66 = Control_R NoSymbol Caps_Lock
 ! keycode 66 = Control_L
 ! keycode 37 = BackSpace
 ! add Control = Control_L
-! ! xcape -t 300 -e 'Control_L=BackSpace' &

@@ -1,11 +1,11 @@
 # If you come from bash you might have to change your $PATH.
 export ASDF_DIR=/opt/asdf-vm
-export PATH=$HOME/bin:/usr/local/bin:~/.scripts:$PATH
+export PATH=$HOME/bin:/usr/local/bin:~/.scripts:$PATH:$ASDF_DIR/bin
 
 source ~/.zplug/init.zsh
 
 # Path to your oh-my-zsh installation.
-export ZSH="/home/lakshamana/.oh-my-zsh"
+export ZSH="/home/$USER/.oh-my-zsh"
 export EDITOR='vim'
 
 # export $BROWSER
@@ -160,6 +160,9 @@ TRAPINT() {
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias la="ls -a"
 alias ta="tmux attach -t 0"
+alias reboot="sudo systemctl reboot"
+alias shutdown="sudo systemctl poweroff"
+alias halt="sudo systemctl halt"
 
 # append completions to fpath
 fpath=(${ASDF_DIR}/completions $fpath)

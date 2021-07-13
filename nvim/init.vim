@@ -3,8 +3,14 @@ syntax on
 let &t_8f = "\<Esc>[38:2:%lu:%lu:%lum"
 let &t_8b = "\<Esc>[48:2:%lu:%lu:%lum"
 
-set t_Co=256
 set hidden
+set ff=unix
+set ffs=unix
+set t_Co=256
+set ignorecase
+set hidden
+set wildmenu wildmode=full
+set nocompatible
 set relativenumber
 set noerrorbells
 set tabstop=2 softtabstop=2
@@ -20,15 +26,11 @@ set undodir=~/.nvim/undodir
 set undofile
 set incsearch
 set splitbelow
-"set termwinsize=10x0
 set colorcolumn=90
-"set autochdir
 set mouse=a
-"set t_Co=256
 set autoread
 set autowrite
-
-"highlight ColorColumn ctermbg=0 guibg=lightgrey
+set showcmd
 
 call plug#begin('~/.nvim/plugged')
 
@@ -50,21 +52,16 @@ Plug 'junegunn/fzf.vim'
 Plug 'stsewd/fzf-checkout.vim'
 Plug 'vuciv/vim-bujo'
 Plug 'tpope/vim-dispatch'
-Plug '/home/mpaulson/personal/vim-apm'
-Plug 'theprimeagen/vim-be-good', {'do': './install.sh'}
 Plug 'vim-airline/vim-airline'
 Plug 'joshdick/onedark.vim'
-" Plug 'gruvbox-community/gruvbox'
-Plug 'scrooloose/nerdcommenter'
+Plug 'gruvbox-community/gruvbox'
 Plug 'prettier/vim-prettier', { 'do': 'npm install' }
 Plug 'jiangmiao/auto-pairs'
-Plug 'skywind3000/vim-terminal-help'
 Plug 'tpope/vim-surround'
 Plug 'antoinemadec/coc-fzf', {'branch': 'release'}
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 Plug 'posva/vim-vue'
 Plug 'tomtom/tcomment_vim'
-Plug 'APZelos/blamer.nvim'
 Plug 'henrik/vim-qargs'
 Plug 'Yggdroot/indentLine'
 Plug 'lukas-reineke/indent-blankline.nvim'
@@ -73,35 +70,62 @@ Plug 'andymass/vim-matchup'
 Plug 'etdev/vim-hexcolor'
 Plug 'ap/vim-buftabline'
 Plug 'jremmen/vim-ripgrep'
-Plug 'eliba2/vim-node-inspect'
 Plug 'nicklasos/vimphphtml'
+Plug 'puremourning/vimspector'
 Plug 'turbio/bracey.vim', { 'do': 'npm i --prefix server' }
-Plug 'xuhdev/vim-latex-live-preview'
 Plug 'makerj/vim-pdf'
 Plug 'tpope/vim-haml'
-Plug 'neowit/vim-force.com'
-Plug 'gruvbox-community/gruvbox'
-Plug 'heavenshell/vim-jsdoc', { 
-  \ 'for': ['javascript', 'javascript.jsx','typescript'], 
-  \ 'do': 'make install'
-\}
-
+Plug 'APZelos/blamer.nvim'
+Plug 'puremourning/vimspector'
+Plug 'm-pilia/vim-ccls'
+Plug 'skywind3000/vim-terminal-help'
+Plug 'felipec/notmuch-vim', { 'do': 'gem install mail' }
+Plug 'lervag/vimtex'
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npm install' }
+Plug 'bingaman/vim-sparkup'
 call plug#end()
 
-let g:apex_backup_folder='/tmp/apex_backup_folder'
-let g:apex_temp_folder='/tmp'
-let g:apex_properties_folder='/home/arjuna/.vim-force'
-let g:apex_tooling_force_dot_com_path='/home/arjuna/Downloads/tooling-force.com-0.4.7.0.jar'
+let g:vimtex_view_method = 'zathura'
+let g:vimtex_compiler_latexmk = { 
+        \ 'executable' : 'latexmk',
+        \ 'options' : [ 
+        \   '-xelatex',
+        \   '-file-line-error',
+        \   '-synctex=1',
+        \   '-interaction=nonstopmode',
+        \ ],
+        \}
+let g:vimtex_quickfix_ignore_filters = [
+      \ 'Underfull',
+      \]
 
-let g:livepreview_previewer = 'mupdf'
+tnoremap <silent> <C-q> <C-\><C-n>
 
-nnoremap <silent><F4> :NodeInspectStart<cr>
-nnoremap <silent><F5> :NodeInspectRun<cr>
-nnoremap <silent><F6> :NodeInspectConnect("127.0.0.1:9229")<cr>
-nnoremap <silent><F7> :NodeInspectStepInto<cr>
-nnoremap <silent><F8> :NodeInspectStepOver<cr>
-nnoremap <silent><F9> :NodeInspectToggleBreakpoint<cr>
-nnoremap <silent><F10> :NodeInspectStop<cr>
+let g:vimspector_enable_mappings = 'HUMAN'
+" customize the UI to add Fkeys
+function! s:CustomiseWinBar()
+  call win_gotoid( g:vimspector_session_windows.code )
+  " Clear the existing WinBar created by Vimspector
+  nunmenu WinBar
+  nnoremenu WinBar.■\ Stop\(F3\) :call vimspector#Stop( { 'interactive': v:false } )<CR>
+  nnoremenu WinBar.▶\ Cont\(F5\) :call vimspector#Continue()<CR>
+  nnoremenu WinBar.▷\ Pause\(F6\) :call vimspector#Pause()<CR>
+  nnoremenu WinBar.↷\ Next\(F10\) :call vimspector#StepOver()<CR>
+  nnoremenu WinBar.→\ Step\(F11\) :call vimspector#StepInto()<CR>
+  nnoremenu WinBar.←\ Out\(F12\) :call vimspector#StepOut()<CR>
+  nnoremenu WinBar.⟲:\(F4\) :call vimspector#Restart()<CR>
+  nnoremenu WinBar.✕ :call vimspector#Reset( { 'interactive': v:false } )<CR>
+  " Cretae our own WinBar
+endfunction
+
+augroup MyVimspectorUICustomistaion
+  autocmd!
+  autocmd User VimspectorUICreated call s:CustomiseWinBar()
+augroup END
+
+let g:bracey_refresh_on_save = 1
+
+let g:livepreview_previewer = 'zathura'
 
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
@@ -116,18 +140,15 @@ let g:buftabline_show = 1
 nnoremap <silent> <Leader>bf :call ToggleEnableBuftabline()<CR>
 
 " JSDoc mapping
-nmap <silent> <C-l> <Plug>(jsdoc)
+" nmap <silent> <M-j> <Plug>(jsdoc)
 
 let g:auto_save = 1  " enable AutoSave on Vim startup
 let g:auto_save_silent = 1  " do not display the auto-save notification
 let g:auto_save_events = ["CursorHold"]
-" set updatetime=1000
 "
 " indentLine - Background (Vim, GVim)
-" let g:indentLine_bgcolor_term = '#808080'
 let g:indentLine_color_term = 239
 let g:indentLine_char = '│'
-" let g:indentLine_setColors = 0
 
 " auto read buffers for externally modified files
 au FocusGained,BufEnter * :checktime
@@ -135,10 +156,6 @@ au FocusGained,BufEnter * :checktime
 let g:onedark_hide_endofbuffer=1
 let g:onedark_termcolors=256
 let g:onedark_terminal_italics=1
-
-" emmet
-let g:user_emmet_mode='a'    "only enable insert mode functions.
-let g:user_emmet_leader_key='<C-_>'
 
 let g:gruvbox_termcolors=256
 let g:gruvbox_invert_selection = 0
@@ -148,6 +165,16 @@ let g:gruvbox_italics=1
 set background=dark
 colorscheme gruvbox
 set termguicolors
+
+highlight Visual guifg=NONE
+highlight MatchParen guifg=#2e9fc7 guibg=NONE gui=underline cterm=underline
+highlight Comment term=italic cterm=italic gui=italic
+
+let g:apex_backup_folder='/tmp/apex_backup_folder'
+
+" emmet
+let g:user_emmet_mode='a'    "only enable insert mode functions.
+let g:user_emmet_leader_key='<C-_>'
 
 " vim-vu config
 let g:vue_pre_processors = 'detect_on_enter'
@@ -181,6 +208,7 @@ let g:netrw_banner = 0
 let g:netrw_winsize = 25
 
 let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.8 } }
+let g:fzf_preview_window = ['right:hidden', 'ctrl-/']
 let $FZF_DEFAULT_OPTS='--reverse'
 let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -l -g ""'
 
@@ -264,10 +292,10 @@ let g:fzf_tag_actions = {
 
 " multicursors plugin mappings
 let g:multi_cursor_use_default_mapping=0
-let g:multi_cursor_select_all_word_key = '<A-n>'
+let g:multi_cursor_select_all_word_key = '<M-n>'
 let g:multi_cursor_start_word_key      = '<C-n>'
 let g:multi_cursor_start_key           = 'g<C-n>'
-let g:multi_cursor_select_all_key      = 'g<A-n>'
+let g:multi_cursor_select_all_key      = 'g<M-n>'
 let g:multi_cursor_next_key            = '<C-n>'
 let g:multi_cursor_prev_key            = '<C-p>'
 let g:multi_cursor_skip_key            = '<C-x>'
@@ -276,15 +304,16 @@ let g:multi_cursor_quit_key            = '<Esc>'
 nnoremap <leader>gc :GCheckout<CR>
 nnoremap <leader>ghw :h <C-R>=expand("<cword>")<CR><CR>
 nnoremap <leader>prw :CocSearch <C-R>=expand("<cword>")<CR><CR>
-nnoremap <leader>pw :Rg <C-R>=expand("<cword>")<CR><CR>
+nnoremap <leader>pw :Ag <C-R>=expand("<cword>")<CR><CR>
+nnoremap <leader>ph :Qdo %s/<C-R>=expand("<cword>")<CR>/
 nnoremap <leader>h :wincmd h<CR>
 nnoremap <leader>j :wincmd j<CR>
 nnoremap <leader>k :wincmd k<CR>
 nnoremap <leader>l :wincmd l<CR>
 nnoremap <leader>u :UndotreeShow<CR>
-"nnoremap <leader>pv :wincmd v<bar> :Ex <bar> :vertical resize 30<CR>
-nnoremap <Leader>ps :Rg<SPACE>
-nnoremap <C-p> :GFiles<CR>
+" nnoremap <leader>pv :wincmd v<bar> :Ex <bar> :vertical resize 30<CR>
+nnoremap <Leader>ps :Ag<SPACE>
+nnoremap <C-p> :FZF<CR>
 nnoremap <Leader>pf :Files<CR>
 nnoremap <Leader><CR> :source ~/.config/nvim/init.vim<CR>
 nnoremap <Leader>+ :vertical resize +5<CR>
@@ -333,7 +362,7 @@ set cmdheight=2
 
 " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
 " delays and poor user experience.
-set updatetime=500
+set updatetime=300
 
 " Don't pass messages to |ins-completion-menu|.
 set shortmess+=c
@@ -383,7 +412,7 @@ nmap <silent> [g <Plug>(coc-diagnostic-prev)
 nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
 " GoTo code navigation.
-nmap <silent> gd :call CocAction('jumpDefinition', 'tab drop')<CR>
+nmap <silent> gd :call CocAction('jumpDefinition')<CR>
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
@@ -399,6 +428,8 @@ let g:coc_snippet_next = '<c-j>'
 
 " Use <C-k> for jump to previous placeholder, it's default of coc.nvim
 let g:coc_snippet_prev = '<c-k>'
+
+let g:coc_auto_copen = 0
 
 " Use <C-j> for both expand and jump (make expand higher priority.)
 imap <C-j> <Plug>(coc-snippets-expand-jump)
@@ -472,6 +503,18 @@ command! -nargs=0 OR   :call     CocAction('runCommand', 'Editor.action.organize
 " provide custom statusline: lightline.vim, vim-airline.
 set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+
+let g:airline_symbols.colnr = '  ㏇:'
+let g:airline_symbols.branch = '⎇ '
+let g:airline_symbols.linenr = '☰ '
+
+let g:airline#extensions#whitespace#checks = []
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#buffer_nr_show = 1
+
 " Mappings for CoCList
 " Show all diagnostics.
 nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
@@ -491,10 +534,12 @@ nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 "nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
 " Sweet Sweet FuGITive
-nnoremap <leader>g2 :diffget //2<CR>
-nnoremap <leader>g3 :diffget //3<CR>
-nnoremap <leader>gs :Gstatus<CR>
-nnoremap <leader>gc :Gcommit -v -q<CR>
+let g:fugitive_conflict_x=1
+
+nnoremap <leader>gf :diffget //2<CR>
+nnoremap <leader>gj :diffget //3<CR>
+nnoremap <leader>gs :Git<CR>
+nnoremap <leader>gc :Git commit -v -q<CR>
 nnoremap <leader>ga :Gcommit --amend<CR>
 nnoremap <leader>gt :Gcommit -v -q %<CR>
 nnoremap <leader>gd :Gdiff<CR>
@@ -504,12 +549,11 @@ nnoremap <leader>gr :Gread<CR>
 nnoremap <leader>gw :Gwrite<CR><CR>
 nnoremap <leader>gl :silent! Git log<CR>
 nnoremap <leader>gp :Ggrep<Space>
-nnoremap <leader>gm :Gmove<Space>
+nnoremap <leader>gm :Git merge<Space>
 nnoremap <leader>gb :Git branch<Space>
-nnoremap <leader>gbs :Gbranches<Space>
-nnoremap <leader>go :Git checkout<Space>
-nnoremap <leader>gps :Dispatch! git push<CR>
-nnoremap <leader>gpl :Dispatch! git pull<CR>
+nnoremap <leader>go :GBranches<CR>
+nnoremap <leader>gps :Git push<CR>
+nnoremap <leader>gpl :Git pull<CR>
 
 " sync open file with NERDTree
 " " Check if NERDTree is open or active
@@ -537,14 +581,16 @@ let g:coc_global_extensions = [
   \ 'coc-eslint', 
   \ 'coc-prettier', 
   \ 'coc-json', 
+  \ 'coc-vetur', 
+  \ 'coc-tabnine', 
+  \ 'coc-yaml', 
+  \ 'coc-css', 
+  \ 'coc-phpls', 
   \ ]
 
-nmap <Leader>p :Prettier<CR>
-nmap <Leader>P :CocPrettier<CR>
+nmap <leader>pt :Prettier<CR>
 " from readme
 " if hidden is not set, TextEdit might fail.
-set hidden " Some servers have issues with backup files, see #649 set nobackup set nowritebackup  Better display for messages set cmdheight=2  You will have bad experience for diagnostic messages when it's default 4000.
-set updatetime=300
 
 " don't give |ins-completion-menu| messages.
 set shortmess+=c
@@ -578,22 +624,12 @@ let g:NERDTreeGitStatusWithFlags = 1
 let g:NERDTreeIgnore = ['^node_modules$', '^dist$', '.nuxt$']
 
 " vim terminal
+let g:terminal_key='<C-l>'
 let g:terminal_cwd=2
 let g:terminal_close=1
 let g:terminal_list=0
-let g:terminal_kill='term'
 
 " vim-prettier
-let g:prettier#quickfix_enabled = 0
-let g:prettier#quickfix_auto_focus = 0
-" let g:prettier#autoformat = 1
-let g:prettier#autoformat_config_present = 1
-let g:prettier#autoformat_config_files = [
-  \ '.prettierrc',
-  \ '.prettierrc.json',
-  \ '.prettierrc.js',
-  \ '.prettierrc.toml',
-  \ ]
 " Max line length that prettier will wrap on: a number or 'auto' (use
 " textwidth).
 " default: 'auto'
@@ -627,7 +663,7 @@ let g:prettier#config#html_whitespace_sensitivity = 'css'
 
 " false|true
 " default: 'false'
-let g:prettier#config#require_pragma = 'false'
+let g:prettier#config#require_pragma = 'true'
 
 let g:prettier#config#arrow_parens = 'avoid'
 let g:prettier#config#single_quote = 'true'
@@ -635,53 +671,161 @@ let g:prettier#config#bracket_spacing = 'true'
 let g:prettier#config#trailing_comma = 'none'
 let g:prettier#config#print_width = 100
 let g:prettier#config#semi = 'false'
-
-" let g:ft = ''
-" function! NERDCommenter_before()
-"   if &ft == 'vue'
-"     let g:ft = 'vue'
-"     let stack = synstack(line('.'), col('.'))
-"     if len(stack) > 0
-"       let syn = synIDattr((stack)[0], 'name')
-"       if len(syn) > 0
-"         exe 'setf ' . substitute(tolower(syn), '^vue_', '', '')
-"       endif
-"     endif
-"   endif
-" endfunction
-" function! NERDCommenter_after()
-"   if g:ft == 'vue'
-"     setf vue
-"     let g:ft = ''
-"   endif
-" endfunction
-
-" prettier command for coc
-"command! -nargs=0 Prettier :CocCommand prettier.formatFile
+let g:prettier#quickfix_enabled = 0
+let g:prettier#quickfix_auto_focus = 0
+let g:prettier#autoformat_require_pragma = 0
+let g:prettier#autoformat_config_present = 1
+let g:prettier#autoformat_config_files = [
+  \ '.prettierrc',
+  \ '.prettierrc.json',
+  \ '.prettierrc.js',
+  \ '.prettierrc.toml',
+  \ ]
 
 " Custom mappings
 inoremap <C-H> <C-W>
 nmap <C-T> :tabnew <CR> :tablast<CR>
 nmap <C-Q> :tabclose <CR>
-nmap <leader>s ysiw
-nnoremap <A-d>d :Gvdiff<CR>
-nnoremap <A-d>h :Gvdiff HEAD<CR>
-nnoremap <A-j> :m .+1<CR>==
-nnoremap <A-k> :m .-2<CR>==
-inoremap <A-j> <Esc>:m .+1<CR>==gi
-inoremap <A-k> <Esc>:m .-2<CR>==gi
-vnoremap <A-j> :m '>+1<CR>gv=gv
-vnoremap <A-k> :m '<-2<CR>gv=gv
+nmap <leader>xx ysiw
+nnoremap <M-d>d :Gvdiff<CR>
+nnoremap <M-d>h :Gvdiff HEAD<CR>
+nnoremap <M-j> :m .+1<CR>==
+nnoremap <M-k> :m .-2<CR>==
+inoremap <M-j> <Esc>:m .+1<CR>==gi
+inoremap <M-k> <Esc>:m .-2<CR>==gi
+vnoremap <M-j> :m '>+1<CR>gv=gv
+vnoremap <M-k> :m '<-2<CR>gv=gv
 nnoremap <leader>; gv
 nnoremap <leader>P li<space><esc>P
-"nnoremap <leader>t :term <CR>
-"tmap <leader>t <C-D><CR>
 nnoremap <C-F>b :NERDTreeFind<CR>
-nnoremap <leader>bl :BlamerToggle<CR>
+
+" blamer.nvim
+let g:blamer_enabled = 1
+nnoremap <Leader>bl :BlamerToggle<CR>
+
 " buftabline
-nnoremap <A-/> :bnext<CR>
-nnoremap <A-,> :bprev<CR>
-nnoremap <Leader>bb :buffers<CR>:buffer<Space>
+nnoremap <M-/> :bnext<CR>
+nnoremap <M-,> :bprev<CR>
+nnoremap <Leader>bb :Buffers<CR>
+" nnoremap <Leader>bs :Buffers<CR>
 nnoremap <Leader>bd :buffers<CR>:bdelete<Space>
 nnoremap <leader>W :MatchupWhereAmI?<CR>
 com! -bar W exe 'w !sudo tee >/dev/null %:p:S' | setl nomod
+
+" Search in all currently opened buffers
+function! Vimgrepall(pattern)
+  call setqflist([])
+  exe 'bufdo vimgrepadd ' . a:pattern . ' %'
+  exe 'copen'
+endfunction
+
+command! -nargs=1 Vim call Vimgrepall(<f-args>)
+
+function! s:line_handler(l)
+  let keys = split(a:l, ':\t')
+  exec 'buf' keys[0]
+  exec keys[1]
+  normal! ^zz
+endfunction
+
+function! s:buffer_lines()
+  let res = []
+  for b in filter(range(1, bufnr('$')), 'buflisted(v:val)')
+    call extend(res, map(getbufline(b,0,"$"), 'b . ":\t" .  (v:key + 1) . ":\t" . v:val '))
+  endfor
+  return res
+endfunction
+
+command! FZFLines call fzf#run({
+\   'source':  <sid>buffer_lines(),
+\   'sink':    function('<sid>line_handler'),
+\   'options': '',
+\   'down':    '30%'
+\})
+
+autocmd ExitPre * call <sid>TermForceCloseAll()
+function! s:TermForceCloseAll() abort
+  echo 'exec term force close all'
+  let term_bufs = filter(range(1, bufnr('$')), 'getbufvar(v:val, "&buftype") == "terminal"')
+  for t in term_bufs
+    exec 'bd! '.t
+  endfor
+endfunction
+
+function! RangeSearch(direction)
+  call inputsave()
+  let g:srchstr = input(a:direction)
+  call inputrestore()
+  if strlen(g:srchstr) > 0
+    let g:srchstr = '\%>'.(line("'<")-1).'l'.
+          \ '\%<'.(line("'>")+1).'l'.
+          \ g:srchstr"'"))'>'">'"))
+  else
+    let g:srchstr = ''
+  endif
+endfunction
+
+vnoremap <silent> / :<C-U>call RangeSearch('/')<CR>:if strlen(g:srchstr) > 0\|exec '/'.g:srchstr\|endif<CR>
+vnoremap <silent> ? :<C-U>call RangeSearch('?')<CR>:if strlen(g:srchstr) > 0\|exec '?'.g:srchstr\|endif<CR>
+
+function! s:get_visual_selection()
+    " Why is this not a built-in Vim script function?!
+    let [line_start, column_start] = getpos("'<")[1:2]
+    let [line_end, column_end] = getpos("'>")[1:2]
+    let lines = getline(line_start, line_end)
+    if len(lines) == 0
+        return ''
+    endif
+    let lines[-1] = lines[-1][: column_end - (&selection == 'inclusive' ? 1 : 2)]
+    let lines[0] = lines[0][column_start - 1:]
+    return join(lines, "\n")
+endfunction
+
+command! -nargs=* -range=% GetSelection :exec 'Ag '.s:get_visual_selection()
+command! -nargs=* -range=% GetSelectionFile :exec '/'.s:get_visual_selection()
+
+nnoremap <leader>i :Vim<space>
+nnoremap <leader>I :Vim<space><C-R>=expand("<cword>")<CR><CR>
+vnoremap <leader>pw :GetSelection<CR>
+vnoremap <leader>s :GetSelectionFile<CR>
+nnoremap <leader>H :%s/<C-R>=expand("<cword>")<CR>/
+vnoremap <leader>H y; :%s/<C-R><C-O>0/
+
+nnoremap <C-A> :%y+<CR>
+nnoremap <Leader>vv "+yg_
+nnoremap <Leader>V "+yy
+
+set cmdheight=1
+
+" tmux configuration
+tmap <silent> <C-@> <C-Space>
+tmap <silent> <M-,> <M-,>
+tmap <silent> <M-/> <M-/>
+tmap <silent> <M-h> <C-,>
+tmap <silent> <M-l> <C-/>
+
+nnoremap <silent> <Leader>@ :echo @%<CR>
+nnoremap zh 16zh
+nnoremap zl 16zl
+
+function EnterOrIndentTag()
+  let line = getline(".")
+  let col = getpos(".")[2]
+  let before = line[col-2]
+  let after = line[col-1]
+
+  if before == ">" && after == "<"
+    return "\<CR>\<C-o>O"
+  endif
+    return "\<CR>"
+endfunction
+
+inoremap <expr> <CR> EnterOrIndentTag()
+
+nmap <silent> <A-Up> :wincmd k<CR>
+nmap <silent> <A-Down> :wincmd j<CR>
+nmap <silent> <A-Left> :wincmd h<CR>
+nmap <silent> <A-Right> :wincmd l<CR>
+
+set conceallevel=0
+set cmdheight=1

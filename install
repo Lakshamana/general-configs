@@ -41,7 +41,7 @@ xmodmap ~/.Xmodmap
 log 'copied ~/.Xmodmap'
 
 # setup i3 config preferences
-cp i3wm/config ~/.i3
+cp i3wm/config ~/.i3/config
 cp -rv i3wm/.scripts ~
 sudo cp i3wm/i3status.conf /etc
 log 'setup i3 preferences'
@@ -103,6 +103,7 @@ log 'setup php asdf env'
 
 # install nodejs
 asdf install nodejs $NODEJS_VERSION
+asdf install nodejs lts
 log 'setup nodejs asdf env'
 
 # setup vim (vim + vim-plug + plugins)
@@ -145,7 +146,7 @@ export BROWSER='/usr/bin/qutebrowser'
 log 'set qutebrowser config and set as default web browser'
 
 # setup elinks
-log 'setting up elinks...'
+log 'setting up elinks..# Installs minimal setup packages for manjaro + i3 workstation.'
 sudo cp elinks/elinks.conf /etc
 
 # miscellaneous
