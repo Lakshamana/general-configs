@@ -83,6 +83,7 @@ Plug 'felipec/notmuch-vim', { 'do': 'gem install mail' }
 Plug 'lervag/vimtex'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npm install' }
 Plug 'bingaman/vim-sparkup'
+Plug 'ap/vim-css-color'
 call plug#end()
 
 let g:vimtex_view_method = 'zathura'
