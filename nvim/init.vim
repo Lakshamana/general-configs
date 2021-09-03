@@ -3,7 +3,6 @@ syntax on
 let &t_8f = "\<Esc>[38:2:%lu:%lu:%lum"
 let &t_8b = "\<Esc>[48:2:%lu:%lu:%lum"
 
-set hidden
 set ff=unix
 set ffs=unix
 set t_Co=256
@@ -17,6 +16,7 @@ set tabstop=2 softtabstop=2
 set shiftwidth=2
 set expandtab
 set smartindent
+set autoindent
 set nu
 set nowrap
 set smartcase
@@ -63,7 +63,6 @@ Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 Plug 'posva/vim-vue'
 Plug 'tomtom/tcomment_vim'
 Plug 'henrik/vim-qargs'
-Plug 'Yggdroot/indentLine'
 Plug 'lukas-reineke/indent-blankline.nvim'
 Plug '907th/vim-auto-save'
 Plug 'andymass/vim-matchup'
@@ -78,12 +77,13 @@ Plug 'tpope/vim-haml'
 Plug 'APZelos/blamer.nvim'
 Plug 'puremourning/vimspector'
 Plug 'm-pilia/vim-ccls'
-Plug 'skywind3000/vim-terminal-help'
+Plug 'akinsho/nvim-toggleterm.lua'
 Plug 'felipec/notmuch-vim', { 'do': 'gem install mail' }
 Plug 'lervag/vimtex'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npm install' }
 Plug 'bingaman/vim-sparkup'
 Plug 'ap/vim-css-color'
+Plug 'martinda/Jenkinsfile-vim-syntax'
 call plug#end()
 
 let g:vimtex_view_method = 'zathura'
@@ -100,13 +100,26 @@ let g:vimtex_quickfix_ignore_filters = [
       \ 'Underfull',
       \]
 
+" let g:clipboard = {
+"   \ 'name': 'WslClipboard',
+"   \ 'copy': {
+"   \   '+': '/mnt/c/Users/guilherme.smethurst/Downloads/win32yank.exe -i --crlf',
+"   \   '*': '/mnt/c/Users/guilherme.smethurst/Downloads/win32yank.exe -i --crlf'
+"   \ },
+"   \ 'paste': {
+"   \   '+': '/mnt/c/Users/guilherme.smethurst/Downloads/win32yank.exe -o --lf',
+"   \   '*': '/mnt/c/Users/guilherme.smethurst/Downloads/win32yank.exe -o --lf',
+"   \ },
+"   \ 'cache_enabled': 0
+"  \}
+
 tnoremap <silent> <C-q> <C-\><C-n>
 
 let g:vimspector_enable_mappings = 'HUMAN'
 " customize the UI to add Fkeys
 function! s:CustomiseWinBar()
   call win_gotoid( g:vimspector_session_windows.code )
-  " Clear the existing WinBar created by Vimspector
+  " Clear the existing WinBar created by VimspectorS
   nunmenu WinBar
   nnoremenu WinBar.■\ Stop\(F3\) :call vimspector#Stop( { 'interactive': v:false } )<CR>
   nnoremenu WinBar.▶\ Cont\(F5\) :call vimspector#Continue()<CR>
@@ -146,10 +159,6 @@ nnoremap <silent> <Leader>bf :call ToggleEnableBuftabline()<CR>
 let g:auto_save = 1  " enable AutoSave on Vim startup
 let g:auto_save_silent = 1  " do not display the auto-save notification
 let g:auto_save_events = ["CursorHold"]
-"
-" indentLine - Background (Vim, GVim)
-let g:indentLine_color_term = 239
-let g:indentLine_char = '│'
 
 " auto read buffers for externally modified files
 au FocusGained,BufEnter * :checktime
@@ -624,11 +633,55 @@ let g:NERDTreeGitStatusWithFlags = 1
 
 let g:NERDTreeIgnore = ['^node_modules$', '^dist$', '.nuxt$']
 
-" vim terminal
-let g:terminal_key='<C-l>'
-let g:terminal_cwd=2
-let g:terminal_close=1
-let g:terminal_list=0
+" nvim toggleterm
+lua << EOF
+require("toggleterm").setup{
+  size = function(term)
+    if term.direction == "horizontal" then
+      return 10
+    elseif term.direction == "vertical" then
+      return vim.o.columns * 0.4
+    end
+  end,
+  open_mapping = [[<c-\>]],
+  hide_numbers = true, -- hide the number column in toggleterm buffers
+  shade_filetypes = {},
+  shade_terminals = true,
+  shading_factor = 3, -- the degree by which to darken to terminal colour, default: 1 for dark backgrounds, 3 for light
+  start_in_insert = true,
+  insert_mappings = true, -- whether or not the open mapping applies in insert mode
+  persist_size = true,
+  direction = 'horizontal',
+  close_on_exit = true, -- close the terminal window when the process exits
+  shell = vim.o.shell, -- change the default shell
+  -- This field is only relevant if direction is set to 'float'
+  float_opts = {
+    -- The border key is *almost* the same as 'nvim_open_win'
+    -- see :h nvim_open_win for details on borders however
+    -- the 'curved' border is a custom border type
+    -- not natively supported but implemented in this plugin.
+    border = 'single',
+    width = 100,
+    height = 10,
+    winblend = 3,
+    highlights = {
+      border = "Normal",
+      background = "Normal"
+    }
+  }
+}
+
+function _G.set_terminal_keymaps()
+  local opts = {noremap = true}
+
+  vim.api.nvim_buf_set_keymap(0, 't', '<M-h>', [[<C-\><C-n><C-W>h]], opts)
+  vim.api.nvim_buf_set_keymap(0, 't', '<M-j>', [[<C-\><C-n><C-W>j]], opts)
+  vim.api.nvim_buf_set_keymap(0, 't', '<M-k>', [[<C-\><C-n><C-W>k]], opts)
+  vim.api.nvim_buf_set_keymap(0, 't', '<M-l>', [[<C-\><C-n><C-W>l]], opts)
+end
+
+vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
+EOF
 
 " vim-prettier
 " Max line length that prettier will wrap on: a number or 'auto' (use
