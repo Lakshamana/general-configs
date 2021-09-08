@@ -64,7 +64,6 @@ Plug 'posva/vim-vue'
 Plug 'tomtom/tcomment_vim'
 Plug 'henrik/vim-qargs'
 Plug 'lukas-reineke/indent-blankline.nvim'
-Plug '907th/vim-auto-save'
 Plug 'andymass/vim-matchup'
 Plug 'etdev/vim-hexcolor'
 Plug 'ap/vim-buftabline'
@@ -82,8 +81,8 @@ Plug 'felipec/notmuch-vim', { 'do': 'gem install mail' }
 Plug 'lervag/vimtex'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npm install' }
 Plug 'bingaman/vim-sparkup'
-Plug 'ap/vim-css-color'
 Plug 'martinda/Jenkinsfile-vim-syntax'
+Plug 'Pocco81/AutoSave.nvim'
 call plug#end()
 
 let g:vimtex_view_method = 'zathura'
@@ -111,7 +110,7 @@ let g:vimtex_quickfix_ignore_filters = [
 "   \   '*': '/mnt/c/Users/guilherme.smethurst/Downloads/win32yank.exe -o --lf',
 "   \ },
 "   \ 'cache_enabled': 0
-"  \}
+" \}
 
 tnoremap <silent> <C-q> <C-\><C-n>
 
@@ -156,9 +155,27 @@ nnoremap <silent> <Leader>bf :call ToggleEnableBuftabline()<CR>
 " JSDoc mapping
 " nmap <silent> <M-j> <Plug>(jsdoc)
 
-let g:auto_save = 1  " enable AutoSave on Vim startup
-let g:auto_save_silent = 1  " do not display the auto-save notification
-let g:auto_save_events = ["CursorHold"]
+lua << EOF
+local autosave = require("autosave")
+
+autosave.setup(
+    {
+        enabled = true,
+        -- execution_message = "AutoSave: saved at " .. vim.fn.strftime("%H:%M:%S"),
+        execution_message = "",
+        events = {"TextChanged", "InsertLeave"},
+        conditions = {
+            exists = true,
+            filetype_is_not = {},
+            modifiable = true
+        },
+        write_all_buffers = false,
+        on_off_commands = true,
+        clean_command_line_interval = 0,
+        debounce_delay = 135
+    }
+)
+EOF
 
 " auto read buffers for externally modified files
 au FocusGained,BufEnter * :checktime
