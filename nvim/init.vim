@@ -46,7 +46,6 @@ Plug 'mbbill/undotree'
 Plug 'preservim/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'sheerun/vim-polyglot'
-Plug 'jremmen/vim-ripgrep'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'stsewd/fzf-checkout.vim'
@@ -67,7 +66,6 @@ Plug 'lukas-reineke/indent-blankline.nvim'
 Plug 'andymass/vim-matchup'
 Plug 'etdev/vim-hexcolor'
 Plug 'ap/vim-buftabline'
-Plug 'jremmen/vim-ripgrep'
 Plug 'nicklasos/vimphphtml'
 Plug 'puremourning/vimspector'
 Plug 'turbio/bracey.vim', { 'do': 'npm i --prefix server' }
@@ -157,23 +155,20 @@ nnoremap <silent> <Leader>bf :call ToggleEnableBuftabline()<CR>
 
 lua << EOF
 local autosave = require("autosave")
-
 autosave.setup(
-    {
-        enabled = true,
-        -- execution_message = "AutoSave: saved at " .. vim.fn.strftime("%H:%M:%S"),
-        execution_message = "",
-        events = {"TextChanged", "InsertLeave"},
-        conditions = {
-            exists = true,
-            filetype_is_not = {},
-            modifiable = true
-        },
-        write_all_buffers = false,
-        on_off_commands = true,
-        clean_command_line_interval = 0,
-        debounce_delay = 135
-    }
+  {
+      enabled = true,
+      events = {"InsertLeave", "TextChanged"},
+      conditions = {
+          exists = true,
+          filetype_is_not = {},
+          modifiable = true
+      },
+      write_all_buffers = false,
+      on_off_commands = true,
+      clean_command_line_interval = 1000,
+      debounce_delay = 0
+  }
 )
 EOF
 
@@ -734,7 +729,7 @@ let g:prettier#config#html_whitespace_sensitivity = 'css'
 
 " false|true
 " default: 'false'
-let g:prettier#config#require_pragma = 'true'
+let g:prettier#config#require_pragma = 'false'
 
 let g:prettier#config#arrow_parens = 'avoid'
 let g:prettier#config#single_quote = 'true'
@@ -744,6 +739,7 @@ let g:prettier#config#print_width = 100
 let g:prettier#config#semi = 'false'
 let g:prettier#quickfix_enabled = 0
 let g:prettier#quickfix_auto_focus = 0
+let g:prettier#autoformat = 1
 let g:prettier#autoformat_require_pragma = 0
 let g:prettier#autoformat_config_present = 1
 let g:prettier#autoformat_config_files = [
@@ -866,9 +862,7 @@ nnoremap <C-A> :%y+<CR>
 nnoremap <Leader>vv "+yg_
 nnoremap <Leader>V "+yy
 
-set cmdheight=1
-
-" tmux configuration
+" tmux configuration 
 tmap <silent> <C-@> <C-Space>
 tmap <silent> <M-,> <M-,>
 tmap <silent> <M-/> <M-/>
