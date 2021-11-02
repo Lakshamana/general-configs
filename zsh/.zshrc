@@ -9,7 +9,7 @@ export ZSH="/home/$USER/.oh-my-zsh"
 export EDITOR='vim'
 
 # export $BROWSER
-export BROWSER="/usr/bin/qutebrowser"
+export BROWSER="/usr/bin/microsoft-edge-beta"
 
 export CLOUDSDK_PYTHON=python2
 

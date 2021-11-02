@@ -4,4 +4,5 @@ variant=`localectl list-x11-keymap-variants "$layout" | dmenu -i -p "Choose a va
 [[ $variant == "" || $layout == "" ]] && exit 1
 
 setxkbmap -layout $layout -variant $variant
+xmodmap ~/.Xmodmap
 notify-send "Using variant $variant for layout $layout"

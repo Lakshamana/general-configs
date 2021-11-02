@@ -64,7 +64,8 @@ Plug 'tomtom/tcomment_vim'
 Plug 'henrik/vim-qargs'
 Plug 'lukas-reineke/indent-blankline.nvim'
 Plug 'andymass/vim-matchup'
-Plug 'etdev/vim-hexcolor'
+" Plug 'shmargum/vim-sass-colors'
+Plug 'gko/vim-coloresque'
 Plug 'ap/vim-buftabline'
 Plug 'nicklasos/vimphphtml'
 Plug 'puremourning/vimspector'
@@ -610,6 +611,7 @@ let g:coc_global_extensions = [
   \ 'coc-phpls', 
   \ ]
 
+
 nmap <leader>pt :Prettier<CR>
 " from readme
 " if hidden is not set, TextEdit might fail.
@@ -620,7 +622,8 @@ set shortmess+=c
 " always show signcolumns
 set signcolumn=yes
 
-nmap <C-b> :NERDTreeToggle<CR>
+nmap <C-h> :NERDTreeToggle<CR>
+nmap <C-f>h :NERDTreeFind<CR>
 " vmap <C-_> <plug>NERDCommenterToggle
 " nmap <C-_> <plug>NERDCommenterToggle
 
@@ -773,7 +776,7 @@ nnoremap <Leader>bl :BlamerToggle<CR>
 " buftabline
 nnoremap <M-/> :bnext<CR>
 nnoremap <M-,> :bprev<CR>
-nnoremap <Leader>bb :Buffers<CR>
+nnoremap <C-L> :Buffers<CR>
 " nnoremap <Leader>bs :Buffers<CR>
 nnoremap <Leader>bd :buffers<CR>:bdelete<Space>
 nnoremap <leader>W :MatchupWhereAmI?<CR>
