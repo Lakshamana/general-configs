@@ -1,15 +1,15 @@
-! swap Caps_Lock and Control_R
-!
-remove Lock = Caps_Lock
-remove Control = Control_R
-keysym Control_R = Caps_Lock
-keysym Caps_Lock = Control_R
-add Control = Control_R
-add Lock = Caps_Lock
-keycode 48 = apostrophe quotedbl dead_acute dead_diaeresis dead_acute dead_diaeresis
-keycode 37 = Mode_switch
-keycode 66 = Control_R NoSymbol Caps_Lock
-! remove Control = Control_L
-! keycode 66 = Control_L
-! keycode 37 = BackSpace
-! add Control = Control_L
+! ! swap Caps_Lock and Control_R
+! !
+! remove Lock = Caps_Lock
+! remove Control = Control_R
+! keysym Control_R = Caps_Lock
+! keysym Caps_Lock = Control_R
+! add Control = Control_R
+! add Lock = Caps_Lock
+! keycode 48 = apostrophe quotedbl dead_acute dead_diaeresis dead_acute dead_diaeresis
+! keycode 37 = Mode_switch
+! keycode 66 = Control_R NoSymbol Caps_Lock
+! ! remove Control = Control_L
+! ! keycode 66 = Control_L
+! ! keycode 37 = BackSpace
+! ! add Control = Control_L

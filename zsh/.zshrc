@@ -1,6 +1,8 @@
 # If you come from bash you might have to change your $PATH.
 export ASDF_DIR=/opt/asdf-vm
 export PATH=$HOME/bin:/usr/local/bin:~/.scripts:$PATH:$ASDF_DIR/bin
+export SUDO_ASKPASS=/sbin/xaskpass
+export SSH_ASKPASS=/sbin/xaskpass
 
 source ~/.zplug/init.zsh
 

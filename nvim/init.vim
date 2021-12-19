@@ -3,6 +3,7 @@ syntax on
 let &t_8f = "\<Esc>[38:2:%lu:%lu:%lum"
 let &t_8b = "\<Esc>[48:2:%lu:%lu:%lum"
 
+set nohlsearch
 set ff=unix
 set ffs=unix
 set t_Co=256
@@ -746,6 +747,7 @@ let g:prettier#autoformat = 1
 let g:prettier#autoformat_require_pragma = 0
 let g:prettier#autoformat_config_present = 1
 let g:prettier#autoformat_config_files = [
+  \ 'prettier.config.js',
   \ '.prettierrc',
   \ '.prettierrc.json',
   \ '.prettierrc.js',
@@ -812,6 +814,8 @@ command! FZFLines call fzf#run({
 \   'options': '',
 \   'down':    '30%'
 \})
+
+nnoremap <silent> <Leader>/ :BLines<CR>
 
 autocmd ExitPre * call <sid>TermForceCloseAll()
 function! s:TermForceCloseAll() abort
