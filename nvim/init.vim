@@ -3,6 +3,7 @@ syntax on
 let &t_8f = "\<Esc>[38:2:%lu:%lu:%lum"
 let &t_8b = "\<Esc>[48:2:%lu:%lu:%lum"
 
+set encoding=utf-8
 set nohlsearch
 set ff=unix
 set ffs=unix
@@ -53,6 +54,7 @@ Plug 'stsewd/fzf-checkout.vim'
 Plug 'vuciv/vim-bujo'
 Plug 'tpope/vim-dispatch'
 Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 Plug 'joshdick/onedark.vim'
 Plug 'gruvbox-community/gruvbox'
 Plug 'prettier/vim-prettier', { 'do': 'npm install' }
@@ -373,6 +375,9 @@ inoremap <C-c> <esc>
 command! -nargs=0 CocPrettier :CocCommand prettier.formatFile
 inoremap <silent><expr> <C-space> coc#refresh()
 
+" autocmd User CocOpenFloat call nvim_win_set_config(g:coc_last_float_win, {'relative': 'editor', 'row': 0, 'col': 0})
+" autocmd User CocOpenFloat call nvim_win_set_width(g:coc_last_float_win, 9999)
+
 " GoTo code navigation.
 " TextEdit might fail if hidden is not set.
 set hidden
@@ -522,22 +527,28 @@ command! -nargs=? Fold :call     CocAction('fold', <f-args>)
 " Add `:OR` command for organize imports of the current buffer.
 command! -nargs=0 OR   :call     CocAction('runCommand', 'Editor.action.organizeImport')
 
-" Add (Neo)Vim's native statusline support.
-" NOTE: Please see `:h coc-status` for integrations with external plugins that
-" provide custom statusline: lightline.vim, vim-airline.
-set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+" " Add (Neo)Vim's native statusline support.
+" " NOTE: Please see `:h coc-status` for integrations with external plugins that
+" " provide custom statusline: lightline.vim, vim-airline.
+" set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
 if !exists('g:airline_symbols')
   let g:airline_symbols = {}
 endif
-
-let g:airline_symbols.colnr = '  ㏇:'
-let g:airline_symbols.branch = '⎇ '
+let g:airline_symbols.space = "\ua0"
+let g:airline_symbols.colnr = '㏇:'
+" let g:airline_symbols.branch = '⎇ '
 let g:airline_symbols.linenr = '☰ '
 
 let g:airline#extensions#whitespace#checks = []
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#buffer_nr_show = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#left_sep = ''
+let g:airline#extensions#tabline#left_alt_sep = ''
+let g:airline#extensions#tabline#right_sep = ''
+let g:airline#extensions#tabline#right_alt_sep = ''
+let g:airline_powerline_fonts = 1
 
 " Mappings for CoCList
 " Show all diagnostics.
@@ -606,7 +617,6 @@ let g:coc_global_extensions = [
   \ 'coc-prettier', 
   \ 'coc-json', 
   \ 'coc-vetur', 
-  \ 'coc-tabnine', 
   \ 'coc-yaml', 
   \ 'coc-css', 
   \ 'coc-phpls', 
@@ -633,6 +643,10 @@ nmap <C-f>h :NERDTreeFind<CR>
 "autocmd VimEnter * NERDTree
 
 let g:NERDTreeGitStatusWithFlags = 1
+" enable line numbers
+let NERDTreeShowLineNumbers=1
+" make sure relative line numbers are used
+autocmd FileType nerdtree setlocal relativenumber
 "let g:WebDevIconsUnicodeDecorateFolderNodes = 1
 "let g:NERDTreeGitStatusNodeColorization = 1
 "let g:NERDTreeColorMapCustom = {
@@ -758,7 +772,6 @@ let g:prettier#autoformat_config_files = [
 inoremap <C-H> <C-W>
 nmap <C-T> :tabnew <CR> :tablast<CR>
 nmap <C-Q> :tabclose <CR>
-nmap <leader>xx ysiw
 nnoremap <M-d>d :Gvdiff<CR>
 nnoremap <M-d>h :Gvdiff HEAD<CR>
 nnoremap <M-j> :m .+1<CR>==
