@@ -11,6 +11,7 @@ env:
   # Note that some xterm terminfo databases don't declare support for italics.
   # You can verify this by checking for the presence of `smso` and `sitm` in
   # `infocmp xterm-256color`.
+  WINIT_X11_SCALE_FACTOR: '1.0'
   TERM: xterm-256color
 
 window:
@@ -19,7 +20,7 @@ window:
   # Specified in number of columns/lines, not pixels. If both are zero this
   # setting is ignored.
   dimensions:
-    columns: 120
+    columns: 110
     lines: 80
 
   # Window padding (changes require restart)
@@ -27,8 +28,8 @@ window:
   # Blank space added around the window in pixels. This padding is not scaled by
   # DPI and the specified value is always added at both opposing sides.
   padding:
-    x: 10
-    y: 10
+    x: 9
+    y: 9
 
   # Spread additional padding evenly around the terminal content.
   dynamic_padding: false

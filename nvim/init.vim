@@ -3,6 +3,7 @@ syntax on
 let &t_8f = "\<Esc>[38:2:%lu:%lu:%lum"
 let &t_8b = "\<Esc>[48:2:%lu:%lu:%lum"
 
+set title
 set encoding=utf-8
 set nohlsearch
 set ff=unix
@@ -71,19 +72,15 @@ Plug 'andymass/vim-matchup'
 Plug 'gko/vim-coloresque'
 Plug 'ap/vim-buftabline'
 Plug 'nicklasos/vimphphtml'
-Plug 'puremourning/vimspector'
 Plug 'turbio/bracey.vim', { 'do': 'npm i --prefix server' }
 Plug 'makerj/vim-pdf'
 Plug 'tpope/vim-haml'
 Plug 'APZelos/blamer.nvim'
 Plug 'puremourning/vimspector'
-Plug 'm-pilia/vim-ccls'
 Plug 'akinsho/nvim-toggleterm.lua'
-Plug 'felipec/notmuch-vim', { 'do': 'gem install mail' }
 Plug 'lervag/vimtex'
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npm install' }
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && chmod +x ./install.sh && ./install.sh' }
 Plug 'bingaman/vim-sparkup'
-Plug 'martinda/Jenkinsfile-vim-syntax'
 Plug 'Pocco81/AutoSave.nvim'
 call plug#end()
 
@@ -117,25 +114,60 @@ let g:vimtex_quickfix_ignore_filters = [
 tnoremap <silent> <C-q> <C-\><C-n>
 
 let g:vimspector_enable_mappings = 'HUMAN'
+
+nnoremap <Leader>dd :call vimspector#Launch()<CR>
+nnoremap <Leader>de :call vimspector#Reset()<CR>
+nnoremap <Leader>dc :call vimspector#Continue()<CR>
+
+nnoremap <Leader>dt :call vimspector#ToggleBreakpoint()<CR>
+nnoremap <Leader>dT :call vimspector#ClearBreakpoints()<CR>
+
+nmap <Leader>dk <Plug>VimspectorRestart
+nmap <Leader>dh <Plug>VimspectorStepOut
+nmap <Leader>dl <Plug>VimspectorStepInto
+nmap <Leader>dj <Plug>VimspectorStepOver
+
+" mnemonic 'di' = 'debug inspect' (pick your own, if you prefer!)
+
+" for normal mode - the word under the cursor
+nmap <Leader>di <Plug>VimspectorBalloonEval
+" for visual mode, the visually selected text
+xmap <Leader>di <Plug>VimspectorBalloonEval
+
 " customize the UI to add Fkeys
+" Set the basic sizes
+let g:vimspector_sidebar_width = 80
+let g:vimspector_code_minwidth = 85
+let g:vimspector_terminal_minwidth = 75
+
 function! s:CustomiseWinBar()
-  call win_gotoid( g:vimspector_session_windows.code )
-  " Clear the existing WinBar created by VimspectorS
-  nunmenu WinBar
-  nnoremenu WinBar.■\ Stop\(F3\) :call vimspector#Stop( { 'interactive': v:false } )<CR>
-  nnoremenu WinBar.▶\ Cont\(F5\) :call vimspector#Continue()<CR>
-  nnoremenu WinBar.▷\ Pause\(F6\) :call vimspector#Pause()<CR>
-  nnoremenu WinBar.↷\ Next\(F10\) :call vimspector#StepOver()<CR>
-  nnoremenu WinBar.→\ Step\(F11\) :call vimspector#StepInto()<CR>
-  nnoremenu WinBar.←\ Out\(F12\) :call vimspector#StepOut()<CR>
-  nnoremenu WinBar.⟲:\(F4\) :call vimspector#Restart()<CR>
-  nnoremenu WinBar.✕ :call vimspector#Reset( { 'interactive': v:false } )<CR>
+        call win_gotoid( g:vimspector_session_windows.code )
+        echo g:vimspector_session_windows.code
+        " Clear the existing WinBar created by VimspectorS
+        nunmenu WinBar
+        nnoremenu WinBar.■\ Stop\(F3\) :call vimspector#Stop( { 'interactive': v:false } )<CR>
+        nnoremenu WinBar.▶\ Cont\(F5\) :call vimspector#Continue()<CR>
+        nnoremenu WinBar.▷\ Pause\(F6\) :call vimspector#Pause()<CR>
+        nnoremenu WinBar.↷\ Next\(F10\) :call vimspector#StepOver()<CR>
+        nnoremenu WinBar.→\ Step\(F11\) :call vimspector#StepInto()<CR>
+        nnoremenu WinBar.←\ Out\(F12\) :call vimspector#StepOut()<CR>
+        nnoremenu WinBar.⟲:\(F4\) :call vimspector#Restart()<CR>
+        nnoremenu WinBar.✕ :call vimspector#Reset( { 'interactive': v:false } )<CR>
   " Cretae our own WinBar
 endfunction
 
+
+function s:SetUpTerminal()
+        " Customise the terminal window size/position
+        " For some reasons terminal buffers in Neovim have line numbers
+        call win_gotoid( g:vimspector_session_windows.terminal )
+        set number relativenumber
+endfunction
+
 augroup MyVimspectorUICustomistaion
-  autocmd!
-  autocmd User VimspectorUICreated call s:CustomiseWinBar()
+        autocmd!
+        autocmd User VimspectorUICreated call s:CustomiseWinBar()
+        autocmd User VimspectorTerminalOpened call s:SetUpTerminal()
 augroup END
 
 let g:bracey_refresh_on_save = 1
@@ -157,12 +189,17 @@ nnoremap <silent> <Leader>bf :call ToggleEnableBuftabline()<CR>
 " JSDoc mapping
 " nmap <silent> <M-j> <Plug>(jsdoc)
 
+augroup AUTOSAVE
+  au!
+  autocmd InsertLeave,TextChanged,FocusLost * silent! write
+augroup END
+
 lua << EOF
 local autosave = require("autosave")
 autosave.setup(
   {
-      enabled = true,
-      events = {"InsertLeave", "TextChanged"},
+      enabled = false,
+      events = {"CursorHold", "FocusGained"},
       conditions = {
           exists = true,
           filetype_is_not = {},
@@ -171,7 +208,7 @@ autosave.setup(
       write_all_buffers = false,
       on_off_commands = true,
       clean_command_line_interval = 1000,
-      debounce_delay = 0
+      debounce_delay = 300
   }
 )
 EOF
@@ -387,7 +424,7 @@ set nobackup
 set nowritebackup
 
 " Give more space for displaying messages.
-set cmdheight=2
+set cmdheight=1
 
 " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
 " delays and poor user experience.
@@ -414,10 +451,14 @@ inoremap <silent><expr> <TAB>
       \ coc#refresh()
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
+inoremap <silent><C-P> <C-\><C-O>:call CocActionAsync('showSignatureHelp')<cr>
+
 function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
+
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 " Use <c-space> to trigger completion.
 if has('nvim')
@@ -535,10 +576,9 @@ command! -nargs=0 OR   :call     CocAction('runCommand', 'Editor.action.organize
 if !exists('g:airline_symbols')
   let g:airline_symbols = {}
 endif
-let g:airline_symbols.space = "\ua0"
-let g:airline_symbols.colnr = '㏇:'
-" let g:airline_symbols.branch = '⎇ '
-let g:airline_symbols.linenr = '☰ '
+let g:airline_symbols.space = " "
+let g:airline_symbols.colnr = "\u2102 "
+" let g:airline_symbols.colnr = "\u262d "
 
 let g:airline#extensions#whitespace#checks = []
 let g:airline#extensions#tabline#enabled = 1
@@ -616,14 +656,14 @@ let g:coc_global_extensions = [
   \ 'coc-eslint', 
   \ 'coc-prettier', 
   \ 'coc-json', 
-  \ 'coc-vetur', 
   \ 'coc-yaml', 
   \ 'coc-css', 
-  \ 'coc-phpls', 
+  \ 'coc-clangd', 
+  \ 'coc-rust-analyzer'
   \ ]
 
 
-nmap <leader>pt :Prettier<CR>
+nmap <leader>pt :CocPrettier<CR>
 " from readme
 " if hidden is not set, TextEdit might fail.
 
@@ -757,8 +797,8 @@ let g:prettier#config#print_width = 100
 let g:prettier#config#semi = 'false'
 let g:prettier#quickfix_enabled = 0
 let g:prettier#quickfix_auto_focus = 0
-let g:prettier#autoformat = 1
-let g:prettier#autoformat_require_pragma = 0
+" let g:prettier#autoformat = 1
+let g:prettier#autoformat_require_pragma = 1
 let g:prettier#autoformat_config_present = 1
 let g:prettier#autoformat_config_files = [
   \ 'prettier.config.js',
