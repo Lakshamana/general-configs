@@ -1,6 +1,6 @@
 # If you come from bash you might have to change your $PATH.
 export ASDF_DIR=/opt/asdf-vm
-export PATH=$HOME/bin:/usr/local/bin:~/.scripts:$PATH:$ASDF_DIR/bin
+export PATH=$HOME/bin:/usr/local/bin:~/.scripts:$PATH:$ASDF_DIR/bin:~/.cargo/bin:~/.local/bin
 export SUDO_ASKPASS=/sbin/xaskpass
 export SSH_ASKPASS=/sbin/xaskpass
 
@@ -165,18 +165,26 @@ alias ta="tmux attach -t 0"
 alias reboot="sudo systemctl reboot"
 alias shutdown="sudo systemctl poweroff"
 alias halt="sudo systemctl halt"
+alias icat="kitty +kitten icat"
+alias w3m="w3m -v"
 
 # append completions to fpath
 fpath=(${ASDF_DIR}/completions $fpath)
 # initialise completions with ZSH's compinit
 autoload -Uz compinit
 
-ZSH_THEME_GIT_PROMPT_PREFIX=" %{$fg[green]%}:: "
+ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[green]%}:: "
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_DIRTY=" %{$fg[red]%}✗%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_CLEAN=" %{$fg[green]%}✔%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_DIRTY=" %{$fg[red]%}✗ %{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_CLEAN=" %{$fg[green]%}%{$reset_color%}"
 
-PROMPT='$THEME_PROMPT_PREFIX%f%B%F{240}%1~%f%b$(git_prompt_info) %(?.%F{green}$THEME_VI_MODE_SYMBOL.%F{red}$THEME_VI_MODE_SYMBOL) '
+PROMPT='$THEME_PROMPT_PREFIX%f%B%F{240}%1~ %f%b$(git_prompt_info)%(?.%F{green}$THEME_VI_MODE_SYMBOL.%F{red}$THEME_VI_MODE_SYMBOL) '
 
+fpath+=~/.zfunc
 compinit
 zplug load
+
+# pnpm
+export PNPM_HOME="/home/arjuna/.local/share/pnpm"
+export PATH="$PNPM_HOME:$PATH"
+# pnpm end

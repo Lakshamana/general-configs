@@ -40,6 +40,6 @@ fi
 
 pipewire &
 pipewire-pulse &
-pipewire-media-session &
+wireplumber &
 
 exec i3

@@ -81,7 +81,7 @@ Plug 'akinsho/nvim-toggleterm.lua'
 Plug 'lervag/vimtex'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && chmod +x ./install.sh && ./install.sh' }
 Plug 'bingaman/vim-sparkup'
-Plug 'Pocco81/AutoSave.nvim'
+" Plug 'pocco81/auto-save.nvim'
 call plug#end()
 
 let g:vimtex_view_method = 'zathura'
@@ -194,24 +194,24 @@ augroup AUTOSAVE
   autocmd InsertLeave,TextChanged,FocusLost * silent! write
 augroup END
 
-lua << EOF
-local autosave = require("autosave")
-autosave.setup(
-  {
-      enabled = false,
-      events = {"CursorHold", "FocusGained"},
-      conditions = {
-          exists = true,
-          filetype_is_not = {},
-          modifiable = true
-      },
-      write_all_buffers = false,
-      on_off_commands = true,
-      clean_command_line_interval = 1000,
-      debounce_delay = 300
-  }
-)
-EOF
+" lua << EOF
+" local autosave = require("autosave")
+" autosave.setup(
+"   {
+"       enabled = false,
+"       events = {"CursorHold", "FocusGained"},
+"       conditions = {
+"           exists = true,
+"           filetype_is_not = {},
+"           modifiable = true
+"       },
+"       write_all_buffers = false,
+"       on_off_commands = true,
+"       clean_command_line_interval = 1000,
+"       debounce_delay = 300
+"   }
+" )
+" EOF
 
 " auto read buffers for externally modified files
 au FocusGained,BufEnter * :checktime
@@ -445,18 +445,17 @@ endif
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " other plugin before putting this into your config.
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-inoremap <silent><C-P> <C-\><C-O>:call CocActionAsync('showSignatureHelp')<cr>
-
 function! s:check_back_space() abort
   let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
+  return !col || getline('.')[col - 1]  =~ '\s'
 endfunction
+
+" Insert <tab> when previous text is space, refresh completion if not.
+inoremap <silent><expr> <TAB>
+  \ coc#pum#visible() ? coc#pum#next(1):
+  \ <SID>check_back_space() ? "\<Tab>" :
+  \ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
@@ -789,6 +788,7 @@ let g:prettier#config#html_whitespace_sensitivity = 'css'
 " default: 'false'
 let g:prettier#config#require_pragma = 'false'
 
+let g:prettier#config#tab_width = 2
 let g:prettier#config#arrow_parens = 'avoid'
 let g:prettier#config#single_quote = 'true'
 let g:prettier#config#bracket_spacing = 'true'
