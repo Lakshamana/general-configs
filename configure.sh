@@ -82,6 +82,8 @@ install_font() {
 }
 
 # Main installation starts here...
+log 'going to $HOME directory..'
+cd $HOME
 
 log 'installing necessary packages...'
 sudo pacman -Sy \
