@@ -81,6 +81,8 @@ install_font() {
       fc-cache
 }
 
+# Main installation starts here...
+
 log 'installing necessary packages...'
 sudo pacman -Sy \
       xorg \
