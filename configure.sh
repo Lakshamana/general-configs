@@ -3,6 +3,9 @@
 
 #!/bin/bash
 
+# set variables
+GITHUB_USERNAME='Lakshamana'
+
 # util functions
 show_usage() {
       echo 'Installs minimal setup needed packages and configs'
@@ -112,6 +115,9 @@ sudo pacman -Sy \
       pavucontrol \
       docker \
       docker-compose
+
+log 'setup dotfiles with chezmoi...'
+chezmoi init --apply $GITHUB_USERNAME
 
 log 'downloading oh-my-zsh + zplug...'
 # setup zsh (ohmyzsh + zplug + config)
