@@ -79,6 +79,7 @@ install_font() {
       # copy files to fonts folder
       cp -r build/dist/* /usr/share/fonts/
       fc-cache
+      cd $HOME
 }
 
 # Main installation starts here...
@@ -91,7 +92,6 @@ sudo pacman -Sy \
       mesa \
       maim \
       python \
-      git \
       xclip \
       base-devel \
       zsh \
@@ -113,15 +113,10 @@ sudo pacman -Sy \
       docker \
       docker-compose
 
-# restart i3
-i3-msg restart
-log 'just restarted i3...'
-
 log 'downloading oh-my-zsh + zplug...'
 # setup zsh (ohmyzsh + zplug + config)
 sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
-cp zsh/.zshrc ~
 log 'updated zsh conf. Will restart at the end...'
 
 log 'downloading and installing yay...'
@@ -129,7 +124,7 @@ log 'downloading and installing yay...'
 cd /opt
 sudo git clone https://aur.archlinux.org/yay.git
 cd yay && makepkg -si
-cd - # go back to previous dir
+cd $HOME # go back to previous dir
 
 log 'updating mirrorlist...'
 yay -Sy rankmirrors
@@ -140,7 +135,6 @@ pacman -Sc --noconfirm
 pacman -Syu --noconfirm
 
 log 'downloading asdf...'
-# install asdf
 yay -Sy asdf-vm
 
 # setup asdf
@@ -157,8 +151,16 @@ nvim -c ':source ~/.config/nvim/init.vim'
 nvim -c ':PlugInstall'
 log 'nvim plugins successfully installed...'
 
+# check npm
+npm -v
+if [ $? -eq 0 ]; then
+      sudo npm i -g pnpm
+fi
+
 # should I install iosevka-custom font?
 prompt_result=`prompt_user "Install iosevka-custom font?" 'y'`
-if [[ $prompt_result == 'y' ]]; then install_font fi
+if [[ $prompt_result == 'y' ]]; then install_font; fi
 
-
+# restart i3
+i3-msg restart
+log 'just restarted i3...'
