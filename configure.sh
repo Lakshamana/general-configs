@@ -81,7 +81,7 @@ install_font() {
       docker build -t iosevka_build . -f Dockerfile
       docker run -e -it -v $(pwd)/build:/build iosevka_build ttf::iosevka-custom
 
-      log 'copying font files to fonts folder'
+      log 'copying font files to fonts folder...'
       # copy files to fonts folder
       cp -r build/dist/* /usr/share/fonts/
       fc-cache
@@ -99,6 +99,7 @@ sudo pacman -Sy \
       maim \
       python \
       xclip \
+      bitwarden \
       base \
       base-devel \
       zsh \
@@ -167,6 +168,7 @@ sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.
        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 nvim -c ':source ~/.config/nvim/init.vim'
 nvim -c ':PlugInstall'
+nvim -c ':CocUpdate'
 log 'nvim plugins successfully installed...'
 
 # check npm
