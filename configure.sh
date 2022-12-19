@@ -129,6 +129,11 @@ sudo pacman -Sy \
       networkmanager-openvpn \
       network-manager-applet
 
+log 'configuring docker for non root users...'
+sudo groupadd docker
+sudo usermod -aG docker $USER
+newgrp docker
+
 log 'setup dotfiles with chezmoi...'
 chezmoi init --apply $GITHUB_USERNAME
 
@@ -168,7 +173,6 @@ sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.
        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 nvim -c ':source ~/.config/nvim/init.vim'
 nvim -c ':PlugInstall'
-nvim -c ':CocUpdate'
 log 'nvim plugins successfully installed...'
 
 # check npm
